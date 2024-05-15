@@ -100,5 +100,12 @@ export const logout = async (req, res) => {
 };
 
 export const getMe = async (req, res) => {
-  res.json({ User: "Hello john dane" });
+try {
+  const user = req.user
+  res.status(200).json(user)
+  
+} catch (error) {
+  console.log("Error in getme controller", error.message);
+  res.status(500).json({ error: "Internal server error" });
+}
 };
