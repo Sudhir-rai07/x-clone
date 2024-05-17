@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userSchema = await mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
