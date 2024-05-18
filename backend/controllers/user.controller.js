@@ -1,3 +1,6 @@
+import bcrypt from 'bcryptjs'
+import { v2 as Cloudinary } from 'cloudinary';
+// Models
 import Notification from "../models/notification.model.js";
 import User from "../models/user.model.js";
 
@@ -83,3 +86,63 @@ export const followAndUnfollowUser = async (req, res) =>{
         console.log("An error occured in followAndUnfollow contoller ", error.message);
       }
     };
+
+export const updateProfile = async (req, res) => {
+  const {username,fullName,email,currentPassword,newPassword,bio,link} = req.body
+  let {profileImg,coverImg} = req.body
+
+  try {
+    const userId = req.user._id
+    let user = await User.findById(userId)
+
+    if((!currentPassword && newPassword) || (currentPassword && !newPassword)) {
+      return res.status(400).json({error: "Please provide both current and new password"})
+    }
+
+    if(currentPassword && newPassword){
+      const isCorrectPassword = await bcrypt.compare(currentPassword, user.password)
+      if(!isCorrectPassword) return res.status(400).json({error: "Current password is invalid"})
+      if(newPassword.length < 6) return res.status(400).json({error: "Password must be at least 6 characters long"})
+      
+        const salt = await bcrypt.genSalt(10)
+        user.password = await bcrypt.hash(newPassword, salt)
+    }
+
+    if(profileImg){
+
+      if(user.profileImg){
+        await Cloudinary.uploader.destroy(user.profileImg.split("/").pop().split(".")[0])
+      }
+
+      const cloudinaryUploadResponsse = await Cloudinary.uploader.upload(profileImg)
+      profileImg = cloudinaryUploadResponsse.secure_url
+    }
+    if(coverImg){
+      if(user.coverImg){
+        await Cloudinary.uploader.destroy(user.coverImg.split("/").pop().split(".")[0])
+      }
+
+      const cloudinaryUploadResponsse = await Cloudinary.uploader.upload(coverImg)
+      coverImg = cloudinaryUploadResponsse.secure_url
+    }
+
+    user.username = username ||  user.username 
+    user.fullName = fullName || user.fullName
+    user.email = email || user.email
+    user.link = link || user.link
+    user.bio = bio || user.bio
+    user.profileImg = profileImg || user.profileImg
+    user.coverImg = coverImg || user.coverImg
+
+
+    await user.save()
+
+    user.password = ""
+
+    res.status(200).json(user)
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    console.log("An error occured in upadateProfile contoller ", error.message);
+  }
+}
