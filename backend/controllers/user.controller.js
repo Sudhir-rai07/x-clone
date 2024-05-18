@@ -96,8 +96,8 @@ export const updateProfile = async (req, res) => {
     let user = await User.findById(userId)
 
     // Check if username is already Taken while updating username
-    const newUsernameIsValid = await User.findOne({username})
-    if(newUsernameIsValid) return res.status(400).json({error: "This username is already taken."})
+    const usernameExistsAlready = await User.findOne({username})
+    if(usernameExistsAlready) return res.status(400).json({error: "This username is already taken."})
 
     if((!currentPassword && newPassword) || (currentPassword && !newPassword)) {
       return res.status(400).json({error: "Please provide both current and new password"})
