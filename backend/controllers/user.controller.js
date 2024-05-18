@@ -101,7 +101,7 @@ export const updateProfile = async (req, res) => {
 
     if(currentPassword && newPassword){
       const isCorrectPassword = await bcrypt.compare(currentPassword, user.password)
-      if(!isCorrectPassword) return res.status(400).json({error: "Current password is invalid"})
+      if(!isCorrectPassword) return res.status(400).json({error: "Current password is incorrenct"})
       if(newPassword.length < 6) return res.status(400).json({error: "Password must be at least 6 characters long"})
       
         const salt = await bcrypt.genSalt(10)

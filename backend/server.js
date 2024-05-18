@@ -20,10 +20,12 @@ Cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET
 })
 
-import authRoute from './routes/auth.router.js'
-import userRoute from './routes/user.route.js'
-app.use("/api/auth", authRoute)
-app.use("/api/users", userRoute)
+import authRoutes from './routes/auth.routes.js'
+import userRoutes from './routes/user.routes.js'
+import postRoutes from './routes/post.routes.js'
+app.use("/api/auth", authRoutes)
+app.use("/api/users", userRoutes)
+app.use("/api/posts", postRoutes)
 
 app.get("/", (req, res)=>{
     res.json({hello: "Working nice"})
