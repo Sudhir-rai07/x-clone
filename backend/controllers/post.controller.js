@@ -114,6 +114,12 @@ export const commentOnPost = async (req, res) => {
     }
 
     post.comments.push(commentPayload)
+    const newNotification = await Notification.create({
+      from: userId,
+      to: post.user,
+      type: "comment",
+    })
+    await newNotification.save()
    await post.save()
 
     res.status(200).json({message: "you commented on this post", post})

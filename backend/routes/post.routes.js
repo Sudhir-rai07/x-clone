@@ -4,7 +4,7 @@ import { commentOnPost, createPost, deletePost, getAllPosts, likePost, } from ".
 
 const router = Router()
 
-router.get('/all-posts', protectRoute, getAllPosts)
+router.get('/all', protectRoute, getAllPosts)
 router.post("/create", protectRoute, createPost)
 router.delete("/delete/:id", protectRoute, deletePost)
 router.post("/like/:id", protectRoute, likePost)
