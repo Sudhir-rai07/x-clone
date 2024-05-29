@@ -7,10 +7,13 @@ export const getNotifications = async (req, res) =>{
         const notifications = await Notification.find({to: userId}).populate({
             path: 'to',
             select: "-password"
+        }).populate({
+            path:"from",
+            select: "-password"
         })
         await Notification.updateMany({to: userId}, {read: true})
         if(notifications.length === 0) 
-           return res.status(200).json({message: "No new notifications"})
+           return res.status(200).json(notifications)
 
         res.status(200).json(notifications)
     } catch (error) {

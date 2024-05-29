@@ -35,6 +35,6 @@ app.get("/", (req, res)=>{
 
 
 app.listen(PORT, ()=>{
-    console.log(`App is listening on pott ${PORT}`)
+    console.log(`App is listening on port ${PORT}`)
     connectToDB()
 })

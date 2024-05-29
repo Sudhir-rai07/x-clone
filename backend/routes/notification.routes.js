@@ -5,5 +5,5 @@ import { deleteNotifications, getNotifications } from "../controllers/notificati
 const router = Router()
 
 router.get("/all", protectRoute, getNotifications)
-router.get("/delete", protectRoute, deleteNotifications)
+router.post("/delete", protectRoute, deleteNotifications)
 export default router
