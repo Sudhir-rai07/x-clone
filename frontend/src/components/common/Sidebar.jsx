@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import Xsvg from "../../components/svgs/X";
 import { MdHomeFilled } from "react-icons/md";
 import { IoIosNotifications } from "react-icons/io";
 import { TbLogout2 } from "react-icons/tb";
@@ -11,6 +12,7 @@ import { FaUser } from "react-icons/fa";
 import boy1 from "/avatars/boy1.png";
 import axios from "axios";
 import toast from "react-hot-toast";
+import XSvg from "../svgs/X";
 
 const Sidebar = () => {
 
@@ -40,6 +42,7 @@ const Sidebar = () => {
   return (
     <section className="h-full py-4 pr-4 ml-4 text-xl border-r-2 border-gray-500 lg:pr-0 lg:w-56">
       <div className="flex flex-col h-full">
+      <Xsvg className=" w-[10%] lg:w-[20%] fill-white mb-3 cursor-pointer" />
         <div className="flex items-center mb-4 text-xl">
           <Link to={"/"} className="flex items-center">
             <span className="mr-2 text-xl">
