@@ -20,7 +20,6 @@ const App = () => {
       const data = await res.json();
       if (data.error) return null;
       if (!res.ok) throw new Error(data.error || "Something went wrong");
-      console.log(data);
       return data;
     } catch (error) {
       throw new Error(error);
@@ -38,9 +37,8 @@ const App = () => {
 
   if (isLoading) return "Loading...";
   if (isError) return <h1>Error</h1>;
-  console.log(authUser);
   return (
-    <div className="flex h-screen max-w-6xl mx-auto">
+    <div className="flex max-w-6xl mx-auto">
       {authUser && <Sidebar />}
       <Routes>
         <Route
@@ -62,7 +60,7 @@ const App = () => {
           }
         />
         <Route
-          path="/profile"
+          path="/profile/:username"
           element={authUser ? <ProfilePage /> : <Navigate to={"/sign-in"} />}
         />
       </Routes>

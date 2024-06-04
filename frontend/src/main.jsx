@@ -10,7 +10,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries:{
       refetchOnWindowFocus: false,
-      retry: false
+      retry: false,
     }
   }
 });
@@ -18,6 +18,7 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
+    <ReactQueryDevtools />
         <BrowserRouter>
           <App />
         </BrowserRouter>

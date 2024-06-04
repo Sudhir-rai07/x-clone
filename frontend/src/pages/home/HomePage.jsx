@@ -1,14 +1,22 @@
 import React, { useState } from 'react'
-import Sidebar from '../../components/common/Sidebar'
+import CreatePost from '../../components/common/CreatePost'
+import Posts from '../../components/common/Posts'
 
 const HomePage = () => {
   const [feedType, setFeedType] = useState("forYou")
   return (
-    <section className='w-full h-screen'>
-    <div className='flex items-center justify-between w-full h-12 px-8 font-semibold bg-black border-b border-white'>
-      <div className={`${feedType === "forYou" ? "underline":""} cursor-pointer underline-offset-4 decoration-blue-400 decoration-2`} onClick={()=> setFeedType("forYou")}>For you</div>
-      <div className={`${feedType === "following" ? "underline":""} cursor-pointer underline-offset-4 decoration-blue-400 decoration-2`} onClick={()=> setFeedType("following")}>Following</div>
+    <section className='w-[40rem] lg:w-[50%] h-screen border-r border-gray-500 px-2 overflow-y-scroll'>
+    <div className='sticky top-0 flex items-center justify-between w-full h-12 px-0 font-semibold border-b border-white backdrop-blur '>
+      <div className={`${feedType === "forYou" ? "underline":""} w-1/2 text-center cursor-pointer underline-offset-4 decoration-blue-400 decoration-2`} onClick={()=> setFeedType("forYou")}>For you</div>
+      <div className={`${feedType === "following" ? "underline":""} w-1/2 text-center cursor-pointer underline-offset-4 decoration-blue-400 decoration-2`} onClick={()=> setFeedType("following")}>Following</div>
     </div>
+
+    <CreatePost />
+    
+    <div>
+    <Posts feedType={feedType}/>
+    </div>
+   
     </section>
   )
 }

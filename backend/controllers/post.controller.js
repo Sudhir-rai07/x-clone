@@ -75,7 +75,9 @@ export const likePost = async (req, res) => {
       await Post.findByIdAndUpdate(postId, { $pull: { likes: userId } });
       await User.findByIdAndUpdate(userId, { $pull: { likedPosts: postId } });
 
-      res.status(200).json({ message: "You unliked this post" });
+      const updatedLikes = post.likes.filter((id)=> id.toString() !== userId.toString())
+
+      res.status(200).json(updatedLikes);
     } else {
       // Like a post
       post.likes.push(userId);
@@ -88,9 +90,10 @@ export const likePost = async (req, res) => {
         to: post.user,
         type: "like",
       });
-
       await newNotification.save();
-      res.status(200).json({ message: "You liked this post" });
+
+      const updatedLikes = post.likes
+      res.status(200).json(updatedLikes);
     }
   } catch (error) {
     console.log("Error in likePost controller", error.message);
@@ -153,9 +156,17 @@ export const getLikedPosts = async (req, res) =>{
       path: "likedPosts",
       select: "-password"
     })
-    if(!user) return res.status(400).json({error: "User not found."})
-    
-      const likedPosts = user.likedPosts;
+
+    const likedPosts = await Post.find({_id : {$in : user.likedPosts}})
+    .populate({
+      path: "user",
+      select: "-password"
+    })
+    .populate({
+      path: "comments.user",
+      select: "-password"
+    })
+      // const likedPosts = user.likedPosts;
       res.status(200).json(likedPosts)
   } catch (error) {
     console.log("Error in getLikedPosts controller", error.message)
@@ -195,7 +206,7 @@ export const getUserPosts = async (req, res) =>{
     .populate({path: "user", select: "-password"})
     .populate({path: "comments.user", select: "-password"})
     
-    res.status(200).json({posts})
+    res.status(200).json(posts)
 
   } catch (error) {
     console.log("Error in getUserPosts controller", error.message)

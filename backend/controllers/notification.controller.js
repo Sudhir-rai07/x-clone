@@ -11,6 +11,9 @@ export const getNotifications = async (req, res) =>{
             path:"from",
             select: "-password"
         })
+        .sort({
+            createdAt: -1
+        })
         await Notification.updateMany({to: userId}, {read: true})
         if(notifications.length === 0) 
            return res.status(200).json(notifications)
