@@ -4,19 +4,24 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 
 import LoadingSpinner from "../../components/common/LoadingSpinner";
+import CreatePost from "../../components/common/CreatePost";
+import { MdAdd } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa";
 import Posts from "../../components/common/Posts";
+import { CiGlass } from "react-icons/ci";
 
 const ProfilePage = () => {
   const [feedType, setFeedType] = useState("posts");
   const { username } = useParams();
 
+  const [viewPostModal, setViewPostModal] = useState(false);
+
+  // userInformation
   const {
     data: user,
     isLoading,
     isError,
     error,
-    refetch,
   } = useQuery({
     queryKey: ["user"],
     queryFn: () => {
@@ -28,21 +33,42 @@ const ProfilePage = () => {
     },
   });
 
+  // userPostData
+const {data: posts} = useQuery({queryKey: ["posts"]})
+
+// Loading
   if (isLoading) return <LoadingSpinner />;
-  console.log(user);
 
   return (
-    <section className="h-screen w-[40rem] lg:w-[60%] overflow-y-scroll">
+    <section className="h-screen w-[40rem] lg:w-[60%] overflow-y-scroll relative">
+      <div
+      title="Add post"
+        className="fixed z-40 w-10 h-10 bg-blue-400 rounded-full cursor-pointer right-5 bottom-10"
+        onClick={(e) => {
+          setViewPostModal(prev => !prev)
+          console.log(viewPostModal)
+        }}
+      >
+        <MdAdd className="w-full h-full text-white" />
+      </div>
+      <div
+        className={`${
+          viewPostModal
+            ? "fixed h-4/5 px-4 bg-black w-4/5 -translate-x-1/2 z-30 -translate-y-1/2 top-1/2 left-1/2 rounded-md shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_10px_10px_30px_4px_rgba(45,78,255,0.15)]"
+            : "hidden"
+        }`}
+      >
+        <CreatePost />
+      </div>
       <div className="sticky top-0 flex items-center px-4 h-14 backdrop-blur-md">
         <div className="mr-8">
           <Link to={"/"}>
             <FaArrowLeft />
           </Link>
         </div>
-
         <div>
           <div className="text-xl font-bold">{user?.data?.fullName}</div>
-          <div className="text-sm text-gray-500"> posts</div>
+          <div className="text-sm text-gray-500">{posts?.data?.length} posts</div>
         </div>
       </div>
       <div className="w-full">
@@ -67,11 +93,13 @@ const ProfilePage = () => {
             </button>
           </div>
         </div>
+
         {/* username */}
         <div className="flex flex-col justify-start text-xl">
           <div className="font-semibold">{user?.data?.fullName}</div>
           <div className="text-sm text-gray-400">@{user?.data?.username}</div>
         </div>
+
         {/* bio */}
         <div className="w-full mt-5">
           <p className="w-4/5">
@@ -83,6 +111,7 @@ const ProfilePage = () => {
             )}
           </p>
         </div>
+
         {/* followers and following */}
         <div className="flex mt-5">
           <div className="mr-5">
@@ -100,6 +129,7 @@ const ProfilePage = () => {
         </div>
       </div>
 
+{/* Feed type */}
       <div className="px-4 mt-8">
         <div className="flex mb-2">
           <span

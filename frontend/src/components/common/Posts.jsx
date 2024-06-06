@@ -48,7 +48,7 @@ refetch()
  console.log(posts)
  if(isLoading) return <LoadingSpinner />
   return <>
-          {posts && posts?.data.map((post,idx)=>(
+          {posts && posts?.data?.map((post,idx)=>(
             <Post post={post} userId={post.user?._id} key={idx}/>
           ))}
   </>;

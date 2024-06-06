@@ -62,6 +62,7 @@ export const deletePost = async (req, res) => {
 export const likePost = async (req, res) => {
   const { id: postId } = req.params;
   const userId = req.user._id;
+  console.log(userId)
 
   try {
     const post = await Post.findById(postId);
