@@ -7,6 +7,7 @@ import Notification from "./Notification";
 
 import { IoCloudDone } from "react-icons/io5";
 import toast from "react-hot-toast";
+import { MdDelete } from "react-icons/md";
 
 const NotificationPage = () => {
   const queryClient = useQueryClient();
@@ -60,10 +61,11 @@ const NotificationPage = () => {
       <div className="flex-col w-full h-full">
         <div className="flex justify-end ">
           <button
-            className="sticky top-0 right-0 rounded-lg btn btn-error btn-sm"
+          title="delete all"
+            className="sticky top-0 right-0 rounded-full btn btn-error btn-sm"
             onClick={() => deleteNotification()}
           >
-            Delete all
+          <MdDelete  className="text-xl text-white"/>
           </button>
         </div>
         {notifications &&

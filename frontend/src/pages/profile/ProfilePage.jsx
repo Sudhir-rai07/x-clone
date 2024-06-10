@@ -1,27 +1,33 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router-dom";
 
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import CreatePost from "../../components/common/CreatePost";
+import Posts from "../../components/common/Posts";
+import useFollow from "../../hooks/useFollow";
+
+
 import { MdAdd } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa";
-import Posts from "../../components/common/Posts";
-import { CiGlass } from "react-icons/ci";
 
 const ProfilePage = () => {
   const [feedType, setFeedType] = useState("posts");
+  const [viewPostModal, setViewPostModal] = useState(false);
+  
   const { username } = useParams();
 
-  const [viewPostModal, setViewPostModal] = useState(false);
-
+  const {data: authUser} = useQuery({queryKey: ["userAuth"]})
+  const {follow, isPending} = useFollow()
   // userInformation
   const {
     data: user,
     isLoading,
     isError,
     error,
+    refetch, isRefetching
   } = useQuery({
     queryKey: ["user"],
     queryFn: () => {
@@ -33,8 +39,19 @@ const ProfilePage = () => {
     },
   });
 
+
+  useEffect(()=>{
+    refetch()
+  }, [username, refetch])
+
   // userPostData
 const {data: posts} = useQuery({queryKey: ["posts"]})
+
+
+
+
+  const isMyProfile = authUser._id == user?.data?._id
+  const isFollowing = user?.data?.followers?.includes(authUser?._id)
 
 // Loading
   if (isLoading) return <LoadingSpinner />;
@@ -60,7 +77,7 @@ const {data: posts} = useQuery({queryKey: ["posts"]})
       >
         <CreatePost />
       </div>
-      <div className="sticky top-0 flex items-center px-4 h-14 backdrop-blur-md">
+      <div className="sticky top-0 flex items-center px-4 h-14 backdrop-blur-md z-50">
         <div className="mr-8">
           <Link to={"/"}>
             <FaArrowLeft />
@@ -71,11 +88,11 @@ const {data: posts} = useQuery({queryKey: ["posts"]})
           <div className="text-sm text-gray-500">{posts?.data?.length} posts</div>
         </div>
       </div>
-      <div className="w-full">
+      <div className="w-full h-52 relative">
         <img
           src={user?.data?.coverImg || "/cover.png"}
           alt=""
-          className="w-full"
+          className="h-full w-full object-cover"
         />
       </div>
       <div className="px-4">
@@ -88,9 +105,12 @@ const {data: posts} = useQuery({queryKey: ["posts"]})
             />
           </div>
           <div className="relative">
-            <button className="relative px-5 py-2 transition-colors duration-200 border border-gray-400 rounded-full cursor-pointer hover:bg-gray-800 top-5">
-              Edit profile
-            </button>
+            {isMyProfile && <button className="relative px-5 py-2 transition-colors duration-200 border border-gray-400 rounded-full cursor-pointer hover:bg-gray-800 top-5">
+              <Link to={`/profile/${authUser?.username}/edit`} >Edit profile</Link>
+            </button>}
+            {!isMyProfile && <button onClick={()=> follow(user?.data?._id)} className="relative px-5 py-2 transition-colors duration-200 border border-gray-400 rounded-full cursor-pointer hover:bg-gray-800 top-5">
+              {isFollowing ? "Unfollow" : "Follow"}
+            </button>}
           </div>
         </div>
 
@@ -105,11 +125,11 @@ const {data: posts} = useQuery({queryKey: ["posts"]})
           <p className="w-4/5">
             {user?.data?.bio || <span className="text-gray-500">add bio</span>}
           </p>
-          <p>
+          <a href={user?.data?.link} target="_blank" className="text-blue-500">
             {user?.data?.link || (
               <span className="text-gray-500">add link</span>
             )}
-          </p>
+          </a>
         </div>
 
         {/* followers and following */}

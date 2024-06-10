@@ -3,14 +3,14 @@ import React, { useRef, useState } from "react";
 import { FaImage } from "react-icons/fa6";
 import { IoCloseSharp } from "react-icons/io5";
 import { CiFaceSmile } from "react-icons/ci";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 const CreatePost = () => {
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
-
+  const queryClient = useQueryClient()
   const imgRef = useRef(null);
 
   const handleImgChange = (e) => {
@@ -31,6 +31,7 @@ const CreatePost = () => {
       }
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({queryKey:["posts"]})
       toast.success("Post created");
       setText("");
       setImg(null);

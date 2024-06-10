@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import Xsvg from "../../components/svgs/X";
@@ -8,12 +8,11 @@ import { IoIosNotifications } from "react-icons/io";
 import { TbLogout2 } from "react-icons/tb";
 import { FaUser } from "react-icons/fa";
 
-import boy1 from "/avatars/boy1.png";
 import axios from "axios";
 import toast from "react-hot-toast";
-import XSvg from "../svgs/X";
 
 const Sidebar = () => {
+  const navigate = useNavigate()
   const queryClient = useQueryClient();
   const { mutate: logout } = useMutation({
     mutationFn: async () => {
@@ -25,6 +24,7 @@ const Sidebar = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["userAuth"] });
+      navigate("/sign-in")
       toast.success("Logged out");
     },
     onError: () => {

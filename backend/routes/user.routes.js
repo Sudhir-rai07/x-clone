@@ -7,6 +7,6 @@ const router = Router()
 router.get("/profile/:username", protectRoute, getUserProfile)
 router.get("/suggested", protectRoute, suggestUserProfile)
 router.post("/follow/:id", protectRoute, followAndUnfollowUser)
-router.post("/update", protectRoute, updateProfile)
+router.put("/update", protectRoute, updateProfile)
 
 export default router

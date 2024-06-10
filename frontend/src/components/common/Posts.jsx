@@ -5,8 +5,10 @@ import axios from "axios";
 
 import LoadingSpinner from '../common/LoadingSpinner'
 import Post from "./Post";
+import { useParams } from "react-router-dom";
 
-const Posts = ({ feedType, userId, username }) => {
+const Posts = ({ feedType, userId }) => {
+  const {username} = useParams()
   const getPostEndPoint = () => {
     switch (feedType) {
       case "forYou":
@@ -27,7 +29,6 @@ const Posts = ({ feedType, userId, username }) => {
   };
 
  const API_URL =  getPostEndPoint()
- console.log(API_URL)
 
 
  const {data: posts, isLoading, isError, refetch, isRefetching} = useQuery({
@@ -44,9 +45,11 @@ const Posts = ({ feedType, userId, username }) => {
 
  useEffect(()=>{
 refetch()
- }, [feedType, refetch])
- console.log(posts)
+ }, [feedType, username,refetch])
+ 
  if(isLoading) return <LoadingSpinner />
+
+ if(posts.data.length === 0) return <div className="text-center">No posts 🐬</div>
   return <>
           {posts && posts?.data?.map((post,idx)=>(
             <Post post={post} userId={post.user?._id} key={idx}/>

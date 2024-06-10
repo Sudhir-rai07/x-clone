@@ -5,55 +5,47 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 import { CiHeart } from "react-icons/ci";
-import { FaTrash } from "react-icons/fa";
+import { FaRegHeart, FaTrash } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { FaRegComment } from "react-icons/fa";
 
 import LoadingSpinner from "./LoadingSpinner";
 import AddCommentModal from "./AddCommentModal";
 import { formatPostDate } from "../../utils/date";
+import { Link } from "react-router-dom";
 
-const Post = ({ post, userId, username }) => {
+const Post = ({ post }) => {
   const [openCommentModal, setOpenCommentModal] = useState(false);
   const queryClient = useQueryClient();
   const { data: authUser } = useQuery({ queryKey: ["userAuth"] });
 
   const isMyPost = post?.user?._id === authUser?._id;
-  const isLiked = post.likes.includes(userId);
+  const isLiked = post?.likes.includes(authUser?._id)
+
 
   const formatDate = formatPostDate(post?.createdAt)
 
-  const {
-    mutate: likePost,
-    data: updatedLikes,
-    isPending: isLiking,
-  } = useMutation({
-    mutationFn: async () => {
+  // Like Post
+  const {mutate: likePost, isPending: isLiking} = useMutation({
+    mutationFn: async () =>{
       try {
-        return await axios.post("/api/posts/like/" + post?._id);
+        return await axios.put(`/api/posts/like/${post._id}`)
       } catch (error) {
-        throw new Error(err);
+        console.log(error)
+        throw new Error(error)
       }
     },
-    onSuccess: (updatedLikes) => {
-      queryClient.invalidateQueries(["posts"])
-      toast.success("post liked");
-      // queryClient.setQueryData(["posts"], (oldData) => {cxzeer[]\
-      //   return oldData.map((p) => {
-      //     if (p._id === post._id) {
-      //       return { ...p, likes: updatedLikes };
-      //     }
-      //     return p;
-      //   });
-      // });
-    },
-    onError: () => {},
-  });
+    onSuccess: (updatedLikes)=>{
+      console.log(updatedLikes)
+      queryClient.invalidateQueries({queryKey: ["posts"]})
+    }
+  })
 
+  // Delete Post
   const { mutate: deletePost, isPending } = useMutation({
     mutationFn: async () => {
       try {
-        return await axios.delete(`/api/posts/delete/${id}`);
+        return await axios.delete(`/api/posts/delete/${post?._id}`);
       } catch (error) {
         throw new Error(error);
       }
@@ -67,27 +59,31 @@ const Post = ({ post, userId, username }) => {
   const handleCommentModalView = () => {
     setOpenCommentModal((prev) => !prev);
   };
-  
+
+  const handleLikePost = () =>{
+    if(isLiking) return;
+    likePost()
+  }
   return (
     <div className="flex w-full px-4 py-2 border-b border-gray-400">
-      <div className="w-10 h-10 mr-2 overflow-hidden rounded-full">
+      <div className="w-10 h-10 mr-2 overflow-hidden rounded-full cursor-pointer">
         <img
-          src="/avatar-placeholder.png"
+          src={post?.user?.profileImg || '/avatar-placeholder.png'}
           alt=""
           className="w-full h-full bg-center bg-cover"
         />
       </div>
       <div className="flex-col items-center w-full">
         <div className="flex items-center w-full">
-          <span className="mr-1 font-bold">{post?.user?.fullName}</span>
-          <span className="text-gray-500">@{post?.user?.username}</span>
+          <Link className="mr-1 font-bold" to={`/profile/${post?.user?.username}`}>{post?.user?.fullName}</Link>
+          <Link className="text-gray-500" to={`/profile/${post?.user?.username}`}>@{post?.user?.username}</Link>
           <span className="ml-3 text-gray-500">{formatDate}</span>
-          <span className="mx-auto">
+          <span className="mx-auto ">
             {isPending && <LoadingSpinner />}
             {!isPending && isMyPost && (
               <FaTrash
                 className="text-white transition-colors duration-100 cursor-pointer active:text-red-600"
-                onClick={() => deletePost(post._id)}
+                onClick={() => deletePost()}
               />
             )}
           </span>
@@ -125,21 +121,11 @@ const Post = ({ post, userId, username }) => {
             </div>
           </div>
 
-          <div onClick={() => likePost()} className="flex items-center">
-            {isLiking && <LoadingSpinner />}
-            {!isLiked && !isLiking && (
-              <CiHeart className="cursor-pointer hover:text-pink-600" />
-            )}
-            {isLiked && !isLiking && (
-              <FaHeart className="text-pink-800 cursor-pointer" />
-            )}
-            <span
-              className={`ml-1 text-sm ${
-                !isLiked ? " text-gray-500" : "text-pink-800"
-              }`}
-            >
-              {post.likes.length}
-            </span>
+          {/* Like */}
+          <div className="flex items-center cursor-pointer" onClick={handleLikePost}>
+          {isLiked && !isLiking && <FaRegHeart className='w-4 h-4 cursor-pointer text-pink-500 ' />}
+          {!isLiked && !isLiking && <FaRegHeart className='w-4 h-4 cursor-pointer text-gray-500 group-hover:text-pink-500' />}
+                <span className={`${isLiked ? "text-pink-500":"text-gray-500"} ml-1`}>{post?.likes.length}</span>
           </div>
         </div>
       </div>

@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import Sidebar from "./components/common/Sidebar";
 import { useQuery } from "@tanstack/react-query";
 import FollowSuggestion from "./components/common/FollowSuggestion";
+import EditProfilePageModal from "./pages/profile/EditProfilePageModal";
 
 const App = () => {
   const handleAuthUser = async () => {
@@ -62,6 +63,10 @@ const App = () => {
         <Route
           path="/profile/:username"
           element={authUser ? <ProfilePage /> : <Navigate to={"/sign-in"} />}
+        />
+        <Route
+          path="/profile/:username/edit"
+          element={authUser ? <EditProfilePageModal authUser={authUser}/> : <Navigate to={"/sign-in"} />}
         />
       </Routes>
       {authUser && <FollowSuggestion />}

@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 
 import { IoMdSend } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
+import { Link } from "react-router-dom";
 
 const AddCommentModal = ({ setModalView, post, comment }) => {
   const [text, setText] = useState("");
@@ -40,8 +41,6 @@ const AddCommentModal = ({ setModalView, post, comment }) => {
     if(!text) return toast.error("A comment must have a text")
     commentOnPost();
   };
-
-  console.log(post.comments);
   return (
     <div className="flex-col items-center justify-center w-full h-full py-4 overflow-y-scroll bg-black">
       {post.comments.length === 0 ? (
@@ -63,12 +62,12 @@ const AddCommentModal = ({ setModalView, post, comment }) => {
             </div>
 
             <div>
-              <div className="text-[10px] flex">
+              <Link className="text-[10px] flex" to={`/profile/${comment.user?.username}`}>
                 <p className="mr-1 font-semibold">{comment.user?.fullName}</p>
                 <p className="text-gray-400 ">
                   @{comment.user?.username}
                 </p>
-              </div>
+              </Link>
 
               <div className="text-sm">
                 <p>{comment?.text}</p>
