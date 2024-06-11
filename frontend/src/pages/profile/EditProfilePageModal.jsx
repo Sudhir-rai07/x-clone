@@ -9,8 +9,8 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const EditProfilePageModal = ({ authUser }) => {
-  const [coverImg, setCoverImg] = useState(authUser?.coverImg || null);
-  const [profileImg, setProfileImg] = useState(authUser?.profileImg || null);
+  const [coverImg, setCoverImg] = useState( null);
+  const [profileImg, setProfileImg] = useState( null);
   const [fullName, setFullName] = useState(authUser?.fullName);
   const [bio, setBio] = useState(authUser?.bio);
   const [link, setLink] = useState(authUser?.link);
@@ -70,30 +70,34 @@ const EditProfilePageModal = ({ authUser }) => {
     }
   });
 
+  const handleFormSubmit = (e) =>{
+    e.preventDefault()
+    updateProfile()
+  }
   console.log(authUser);
   return (
-    <section className="h-screen w-full flex justify-center overflow-y-scroll">
-      <form className="h-full w-4/5 flex flex-col  relative mb-4" onSubmit={updateProfile}>
-        <div className="h-12 w-full flex justify-between px-4 items-center">
+    <section className="flex justify-center w-full h-screen overflow-y-scroll">
+      <form className="relative flex flex-col w-4/5 h-full mb-4" onSubmit={handleFormSubmit}>
+        <div className="flex items-center justify-between w-full h-12 px-4">
           <Link to={`/profile/${authUser?.username}`}>
             <FaArrowLeft />
           </Link>
           <div>
             <button
               type="submit"
-              className="border border-gray-500 px-3 py-1 rounded-full hover:bg-blue-500 hover:text-black transition-colors duration-200 hover:border-blue-500"
+              className="px-3 py-1 transition-colors duration-200 border border-gray-500 rounded-full hover:bg-blue-500 hover:text-black hover:border-blue-500"
             >
               {isUpdating? "Updating...": "Save"}
             </button>
           </div>
         </div>
-        <div className="lg:w-full w-350px h-52 relative">
+        <div className="relative lg:w-full w-350px h-52">
           <img
-            src={coverImg || "/cover.png"}
+            src={authUser?.coverImg || "/cover.png"}
             alt=""
-            className="h-full w-full rounded-lg object-cover"
+            className="object-cover w-full h-full rounded-lg"
           />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer text-2xl flex text-black">
+          <div className="absolute flex text-2xl text-black -translate-x-1/2 -translate-y-1/2 cursor-pointer top-1/2 left-1/2">
             <div>
               <TbCameraPlus
                 onClick={() => coverImgRef.current.click()}
@@ -112,14 +116,14 @@ const EditProfilePageModal = ({ authUser }) => {
           </div>
         </div>
 
-        <div className="h-24 w-24 relative">
-          <div className="absolute h-24 w-24 -top-10 overflow-hidden rounded-full border-2 border-black">
+        <div className="relative w-24 h-24">
+          <div className="absolute w-24 h-24 overflow-hidden border-2 border-black rounded-full -top-10">
             <img
-              src={profileImg || "/avatar-placeholder.png"}
+              src={authUser?.profileImg || "/avatar-placeholder.png"}
               alt=""
-              className="h-full rounded-lg object-cover object-center"
+              className="object-cover object-center h-full rounded-lg"
             />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 cursor-pointer text-2xl flex text-black">
+            <div className="absolute flex text-2xl text-black -translate-x-1/2 -translate-y-1/2 cursor-pointer top-1/2 left-1/2">
               <div>
                 <TbCameraPlus
                   onClick={() => profileImgRef.current.click()}
@@ -140,14 +144,14 @@ const EditProfilePageModal = ({ authUser }) => {
         </div>
 
         {/* FullName */}
-        <div className="border mb-4 border-gray-400 w-full py-2 px-2 bg-black rounded-md flex flex-col-reverse">
+        <div className="flex flex-col-reverse w-full px-2 py-2 mb-4 bg-black border border-gray-400 rounded-md">
           <input
             type="text"
             id="fullName"
             name="fullName"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            className="w-full outline-none bg-black peer"
+            className="w-full bg-black outline-none peer"
           />
           <label
             htmlFor="fullName"
@@ -158,14 +162,14 @@ const EditProfilePageModal = ({ authUser }) => {
         </div>
 
         {/* Bio */}
-        <div className="border mb-4 border-gray-400 w-full py-2 px-2 bg-black rounded-md flex flex-col-reverse">
+        <div className="flex flex-col-reverse w-full px-2 py-2 mb-4 bg-black border border-gray-400 rounded-md">
           <input
             type="text"
             id="bio"
             name="bio"
             value={bio}
             onChange={(e) => setBio(e.target.value)}
-            className="w-full outline-none bg-black peer"
+            className="w-full bg-black outline-none peer"
           />
           <label
             htmlFor="bio"
@@ -176,14 +180,14 @@ const EditProfilePageModal = ({ authUser }) => {
         </div>
 
         {/* Link */}
-        <div className="border mb-4 border-gray-400 w-full py-2 px-2 bg-black rounded-md flex flex-col-reverse">
+        <div className="flex flex-col-reverse w-full px-2 py-2 mb-4 bg-black border border-gray-400 rounded-md">
           <input
             type="text"
             id="link"
             name="link"
             value={link}
             onChange={(e) => setLink(e.target.value)}
-            className="w-full outline-none bg-black peer placeholder-gray-500"
+            className="w-full placeholder-gray-500 bg-black outline-none peer"
             placeholder="add a website"
           />
           <label
@@ -195,10 +199,10 @@ const EditProfilePageModal = ({ authUser }) => {
         </div>
 
         {/* Passoword */}
-        <div className="border border-gray-400 w-full py-2 px-2 bg-black flex rounded-md gap-2">
+        <div className="flex w-full gap-2 px-2 py-2 bg-black border border-gray-400 rounded-md">
           <input
             type="password"
-            className="bg-black w-1/2 border py-2 px-2 rounded-md outline-none focus:border focus:border-blue-500"
+            className="w-1/2 px-2 py-2 bg-black border rounded-md outline-none focus:border focus:border-blue-500"
             name="currentPassword"
             placeholder="current password"
             value={currentPassword}
@@ -206,7 +210,7 @@ const EditProfilePageModal = ({ authUser }) => {
           />
           <input
             type="password"
-            className="bg-black w-1/2 border py-2 px-2 rounded-md outline-none focus:border focus:border-blue-500"
+            className="w-1/2 px-2 py-2 bg-black border rounded-md outline-none focus:border focus:border-blue-500"
             name="newPassword"
             placeholder="new password"
             value={newPassword}
