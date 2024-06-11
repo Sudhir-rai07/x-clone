@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { FaArrowLeft, FaCross } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { TbCameraPlus, TbHorse } from "react-icons/tb";
 import { MdOutlineCancel } from "react-icons/md";
@@ -17,6 +17,8 @@ const EditProfilePageModal = ({ authUser }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
+
+  const navigate = useNavigate()
   const handleCoverImgChange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
