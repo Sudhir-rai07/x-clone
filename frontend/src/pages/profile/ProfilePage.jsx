@@ -8,16 +8,21 @@ import LoadingSpinner from "../../components/common/LoadingSpinner";
 import CreatePost from "../../components/common/CreatePost";
 import Posts from "../../components/common/Posts";
 import useFollow from "../../hooks/useFollow";
+import {formatMemberSinceDate} from '../../utils/date/index.js'
 
 
 import { MdAdd } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa";
+import { FaCalendarAlt } from "react-icons/fa";
+import { IoMdLink } from "react-icons/io";
 
 const ProfilePage = () => {
   const [feedType, setFeedType] = useState("posts");
   const [viewPostModal, setViewPostModal] = useState(false);
   
   const { username } = useParams();
+
+
 
   const {data: authUser} = useQuery({queryKey: ["userAuth"]})
   const {follow, isPending} = useFollow()
@@ -39,6 +44,8 @@ const ProfilePage = () => {
     },
   });
 
+  const memberSince = formatMemberSinceDate(user?.data?.createdAt)
+  console.log(memberSince)
 
   useEffect(()=>{
     refetch()
@@ -77,7 +84,7 @@ const {data: posts} = useQuery({queryKey: ["posts"]})
       >
         <CreatePost />
       </div>
-      <div className="sticky top-0 flex items-center px-4 h-14 backdrop-blur-md z-50">
+      <div className="sticky top-0 z-50 flex items-center px-4 h-14 backdrop-blur-md">
         <div className="mr-8">
           <Link to={"/"}>
             <FaArrowLeft />
@@ -88,11 +95,11 @@ const {data: posts} = useQuery({queryKey: ["posts"]})
           <div className="text-sm text-gray-500">{posts?.data?.length} posts</div>
         </div>
       </div>
-      <div className="w-full h-52 relative">
+      <div className="relative w-full h-52">
         <img
           src={user?.data?.coverImg || "/cover.png"}
           alt=""
-          className="h-full w-full object-cover"
+          className="object-cover w-full h-full"
         />
       </div>
       <div className="px-4">
@@ -121,15 +128,22 @@ const {data: posts} = useQuery({queryKey: ["posts"]})
         </div>
 
         {/* bio */}
-        <div className="w-full mt-5">
-          <p className="w-4/5">
+        <div className="w-full mt-4">
+          <p className="w-4/5 text-white">
             {user?.data?.bio || <span className="text-gray-500">add bio</span>}
           </p>
-          <a href={user?.data?.link} target="_blank" className="text-blue-500">
+         <div className="flex items-center">
+          <div className="mr-2 text-gray-50"><IoMdLink /></div>
+          <div> <a href={user?.data?.link} target="_blank" className="text-blue-500">
             {user?.data?.link || (
               <span className="text-gray-500">add link</span>
             )}
-          </a>
+          </a></div>
+         </div>
+
+          <div className="flex items-center mt-1 text-sm text-gray-500">
+<FaCalendarAlt/> <div className="ml-2"> {memberSince}</div>
+          </div>
         </div>
 
         {/* followers and following */}

@@ -74,7 +74,6 @@ const EditProfilePageModal = ({ authUser }) => {
     e.preventDefault()
     updateProfile()
   }
-  console.log(authUser);
   return (
     <section className="flex justify-center w-full h-screen overflow-y-scroll">
       <form className="relative flex flex-col w-4/5 h-full mb-4" onSubmit={handleFormSubmit}>
@@ -93,7 +92,7 @@ const EditProfilePageModal = ({ authUser }) => {
         </div>
         <div className="relative lg:w-full w-350px h-52">
           <img
-            src={authUser?.coverImg || "/cover.png"}
+            src={(coverImg || authUser?.coverImg )|| "/cover.png"}
             alt=""
             className="object-cover w-full h-full rounded-lg"
           />
@@ -119,7 +118,7 @@ const EditProfilePageModal = ({ authUser }) => {
         <div className="relative w-24 h-24">
           <div className="absolute w-24 h-24 overflow-hidden border-2 border-black rounded-full -top-10">
             <img
-              src={authUser?.profileImg || "/avatar-placeholder.png"}
+              src={(profileImg || authUser?.profileImg) || "/avatar-placeholder.png"}
               alt=""
               className="object-cover object-center h-full rounded-lg"
             />
