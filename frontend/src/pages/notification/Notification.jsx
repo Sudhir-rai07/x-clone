@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { formatPostDate } from "../../utils/date";
 
 const Notification = ({ notification }) => {
+  const notificationTime = formatPostDate(notification?.createdAt)
   const renderMessage = () => {
     switch (notification?.type) {
       case "like":
@@ -8,7 +10,7 @@ const Notification = ({ notification }) => {
           <div>
             <span className="font-bold cursor-pointer">
               <Link to={`/profile/${notification?.from?.username}`}>
-                {notification?.from?.username}
+                @{notification?.from?.username}
               </Link>
             </span>{" "}
             liked your post{" "}
@@ -19,7 +21,7 @@ const Notification = ({ notification }) => {
           <div>
             <span className="font-bold cursor-pointer">
               <Link to={`/profile/${notification?.from?.username}`}>
-                {notification?.from?.username}
+                @{notification?.from?.username}
               </Link>
             </span>{" "}
             commented your post{" "}
@@ -30,7 +32,7 @@ const Notification = ({ notification }) => {
           <div>
             <span className="font-bold cursor-pointer">
               <Link to={`/profile/${notification?.from?.username}`}>
-                {notification?.from?.username}
+                @{notification?.from?.username}
               </Link>
             </span>{" "}
             started following you
@@ -48,7 +50,7 @@ const Notification = ({ notification }) => {
           className="w-8 h-8 mr-2 overflow-hidden rounded-full"
         />
         <div>
-          {renderMessage()}{" "}
+          <p className="flex items-center">{renderMessage() } <span className="ml-2 text-sm text-gray-500">{notificationTime}</span></p>
           {!notification?.read && (
             <span className="text-sm text-blue-400">new</span>
           )}

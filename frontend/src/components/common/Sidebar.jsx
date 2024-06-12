@@ -7,6 +7,7 @@ import { MdHomeFilled } from "react-icons/md";
 import { IoIosNotifications } from "react-icons/io";
 import { TbLogout2 } from "react-icons/tb";
 import { FaUser } from "react-icons/fa";
+import { MdFeedback } from "react-icons/md";
 
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -36,8 +37,11 @@ const Sidebar = () => {
   return (
     <section className="w-10 h-screen py-4 pr-4 ml-4 border-r-2 border-gray-500 lg:w-56">
       <div className="flex flex-col h-full mr-2">
+        <Link to={"/"}>
         <Xsvg className="w-6 mb-3 cursor-pointer lg:w-20 fill-white" />
-        <div className="flex items-center mb-4 text-xl">
+        </Link>
+
+        <div className="flex items-center mb-4 text-xl" title="home">
           <Link to={"/"} className="flex items-center">
             <span className="mr-2 text-xl">
               <MdHomeFilled />
@@ -46,7 +50,7 @@ const Sidebar = () => {
           </Link>
         </div>
 
-        <div className="flex items-center mb-4 text-xl">
+        <div className="flex items-center mb-4 text-xl" title="notifications">
           <Link to={"/notifications"} className="flex items-center">
             <span className="mr-2 text-xl">
               <IoIosNotifications />
@@ -55,7 +59,7 @@ const Sidebar = () => {
           </Link>
         </div>
 
-        <div className="flex items-center mb-4 text-xl">
+        <div className="flex items-center mb-4 text-xl" title={authUser?.username}>
           <Link
             to={`/profile/${authUser?.username}`}
             className="flex items-center"
@@ -67,6 +71,18 @@ const Sidebar = () => {
           </Link>
         </div>
 
+        <div className="flex items-center mb-4 text-xl" title="feedback">
+          <Link
+            to={`/feedback`}
+            className="flex items-center"
+          >
+            <span className="mr-2 text-xl">
+              <MdFeedback />
+            </span>
+            <span className="hidden lg:block">Feedback</span>
+          </Link>
+        </div>
+
         {authUser && (
           <div className="flex items-center my-auto mb-4 text-xl">
             <Link to={`/profile/${authUser?.username}`} className="flex">
@@ -74,7 +90,7 @@ const Sidebar = () => {
                 <img
                   src={authUser?.profileImg || "/avatar-placeholder.png"}
                   alt="ProfileImg"
-                  className="w-full h-full rounded-full"
+                  className="w-[32px] h-[32px] rounded-full"
                 />
               </div>
               <div className="hidden h-full ml-1 text-sm lg:block">

@@ -11,6 +11,7 @@ import Sidebar from "./components/common/Sidebar";
 import { useQuery } from "@tanstack/react-query";
 import FollowSuggestion from "./components/common/FollowSuggestion";
 import EditProfilePageModal from "./pages/profile/EditProfilePageModal";
+import Feedback from "./pages/feedback/Feedback";
 
 const App = () => {
   const handleAuthUser = async () => {
@@ -67,6 +68,11 @@ const App = () => {
         <Route
           path="/profile/:username/edit"
           element={authUser ? <EditProfilePageModal authUser={authUser}/> : <Navigate to={"/sign-in"} />}
+        />
+        
+        <Route
+          path="/feedback"
+          element={authUser ? <Feedback authUser={authUser}/> : <Navigate to={"/sign-in"} />}
         />
       </Routes>
       {authUser && <FollowSuggestion />}
