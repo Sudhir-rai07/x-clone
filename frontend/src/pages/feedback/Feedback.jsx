@@ -42,7 +42,7 @@ const Feedback = () => {
           <h2 className="text-xl">Write your feedback here :</h2>
           <textarea
             rows={5}
-            className="p-2 mt-2 transition-colors duration-200 border-2 border-white rounded-md outline-none focus:border-blue-500"
+            className="p-2 mt-2 transition-colors duration-200 border-2 border-white rounded-md outline-none focus:border-[#f39200]"
             placeholder="Here..."
             name="text"
             value={text}
@@ -50,7 +50,7 @@ const Feedback = () => {
           />
 
           <div className="flex mx-auto mt-4 mr-1">
-            <button disabled={!text} type="submit" className="px-4 py-2 transition-colors duration-200 bg-blue-500 border-none rounded-full disabled:text-black disabled:bg-gray-500 disabled:cursor-not-allowed">{isPending ? "Posting":"Submit"}</button>
+            <button disabled={!text} type="submit" className="px-4 py-2 text-black transition-colors duration-200 bg-white border-none rounded-full disabled:text-black disabled:bg-gray-500 disabled:cursor-not-allowed">{isPending ? "Posting":"Submit"}</button>
           </div>
         </div>
       </form>

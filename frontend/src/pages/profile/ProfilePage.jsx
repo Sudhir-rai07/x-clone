@@ -115,8 +115,8 @@ const {data: posts} = useQuery({queryKey: ["posts"]})
             {isMyProfile && <button className="relative px-5 py-2 transition-colors duration-200 border border-gray-400 rounded-full cursor-pointer hover:bg-gray-800 top-5">
               <Link to={`/profile/${authUser?.username}/edit`} >Edit profile</Link>
             </button>}
-            {!isMyProfile && <button onClick={()=> follow(user?.data?._id)} className="relative px-5 py-2 transition-colors duration-200 border border-gray-400 rounded-full cursor-pointer hover:bg-gray-800 top-5">
-              {isFollowing ? "Unfollow" : "Follow"}
+            {!isMyProfile && <button onClick={()=> follow(user?.data?._id)} className={`relative px-5 py-2 transition-colors duration-200 border ${isFollowing ? "border-[#f39200] hover:bg-[#f39200] hover:text-black":"border-gray-400"} border-gray-400 rounded-full cursor-pointer hover:bg-gray-800 top-5`}>
+              {isFollowing ? "Following" : "Follow"}
             </button>}
           </div>
         </div>

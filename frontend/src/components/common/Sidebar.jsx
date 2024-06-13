@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import Xsvg from "../../components/svgs/X";
@@ -14,6 +14,10 @@ import toast from "react-hot-toast";
 
 const Sidebar = () => {
   const navigate = useNavigate()
+  const location = useLocation()
+
+  console.log(location.pathname.split("/"))
+
   const queryClient = useQueryClient();
   const { mutate: logout } = useMutation({
     mutationFn: async () => {
@@ -37,11 +41,11 @@ const Sidebar = () => {
   return (
     <section className="w-10 h-screen py-4 pr-4 ml-4 border-r-2 border-gray-500 lg:w-56">
       <div className="flex flex-col h-full mr-2">
-        <Link to={"/"}>
-        <Xsvg className="w-6 mb-3 cursor-pointer lg:w-20 fill-white" />
+        <Link to={"/"} className="hidden lg:flex">
+        <Xsvg height={100} width={100} className="w-6 mb-3 cursor-pointer lg:w-20 fill-white" />
         </Link>
 
-        <div className="flex items-center mb-4 text-xl" title="home">
+        <div className={`flex items-center mb-4 text-xl ${location.pathname === "/" ? "text-[#f39200]":""}`} title="home">
           <Link to={"/"} className="flex items-center">
             <span className="mr-2 text-xl">
               <MdHomeFilled />
@@ -50,7 +54,7 @@ const Sidebar = () => {
           </Link>
         </div>
 
-        <div className="flex items-center mb-4 text-xl" title="notifications">
+        <div className={`flex items-center mb-4 text-xl ${location.pathname === "/notifications" ? "text-[#f39200]":""}`}  title="notifications">
           <Link to={"/notifications"} className="flex items-center">
             <span className="mr-2 text-xl">
               <IoIosNotifications />
@@ -59,7 +63,7 @@ const Sidebar = () => {
           </Link>
         </div>
 
-        <div className="flex items-center mb-4 text-xl" title={authUser?.username}>
+        <div className={`flex items-center mb-4 text-xl ${location.pathname.split("/")[1] == `profile` ? "text-[#f39200]":""}`}  title={authUser?.username}>
           <Link
             to={`/profile/${authUser?.username}`}
             className="flex items-center"
@@ -71,7 +75,7 @@ const Sidebar = () => {
           </Link>
         </div>
 
-        <div className="flex items-center mb-4 text-xl" title="feedback">
+        <div className={`flex items-center mb-4 text-xl ${location.pathname === "/feedback" ? "text-[#f39200]":""}`}  title="feedback">
           <Link
             to={`/feedback`}
             className="flex items-center"

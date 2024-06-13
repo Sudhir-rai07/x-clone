@@ -55,15 +55,12 @@ const LoginPage = () => {
   return (
     <div className="flex w-full h-screen max-w-screen-xl pt-10 pl-4 mx-auto lg:pl-0">
       <section className="items-center justify-center hidden w-full sm:flex sm:w-1/2">
-        <Xsvg className=" sm:w-3/6 fill-white" />
+        <Xsvg height={400} width={400} className=" sm:w-3/6 fill-white" />
       </section>
-      <section className="flex flex-col justify-start w-full sm:w-1/2">
-        <div className="flex justify-start sm:hidden">
-          <Xsvg className="w-16 fill-white" />
-        </div>
-        <h2 className="mt-8 text-5xl font-bold">Happenig now</h2>
-        <h2 className="mt-8 text-2xl font-bold">Join today.</h2>
-        <form className="w-64 mt-8" onSubmit={handleSubmit}>
+      <section className="flex flex-col items-center justify-center w-full lg:justify-start sm:w-1/2">
+        <h2 className="mt-4 text-2xl font-bold lg:mt-8 lg:text-5xl sm:text-3xl">Connecting now</h2>
+        <h2 className="mt-3 text-2xl font-bold lg:text-4xl lg:mt-8">Join today.</h2>
+        <form className="w-64 mt-4 lg:mt-8" onSubmit={handleSubmit}>
           <div className="flex flex-col mt-2">
             <input
               type="text"
@@ -101,8 +98,8 @@ const LoginPage = () => {
           </div>
         </form>
 
-        <div className="pb-4 mx-auto mt-6 ml-4">
-          <span className="text-sm text-center">Don't have an account? </span>
+        <div className="flex items-center justify-center w-full pb-4 mx-auto mt-6">
+          <span className="mr-1 text-sm text-center">Don't have an account? </span>
           <Link to={"/sign-up"} className="text-blue-500">
             Sign Up
           </Link>
