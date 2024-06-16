@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { TbCameraPlus, TbHorse } from "react-icons/tb";
 import { MdOutlineCancel } from "react-icons/md";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import toast from "react-hot-toast";
 
 const EditProfilePageModal = ({ authUser }) => {
@@ -41,22 +41,26 @@ const EditProfilePageModal = ({ authUser }) => {
   const profileImgRef = useRef(null);
 
   const queryClinet = useQueryClient();
-  const {mutate: updateProfile, isPending:isUpdating} = useMutation({
-    mutationFn: async () => {
-      try {
-        return await axios.put(`/api/users/update`, {
-          coverImg,
-          profileImg,
-          fullName,
-          bio,
-          link,
-          currentPassword,
-          newPassword,
-        });
-      } catch (error) {
-        console.log(error);
-        throw new Error(error);
-      }
+  const handleUpdateProfile = async () => {
+    try {
+      return axios.put(`/api/users/update`, {
+        coverImg,
+        profileImg,
+        fullName,
+        bio,
+        link,
+        currentPassword,
+        newPassword,
+      });
+    } catch (error) {
+      console.log(error.response);
+      throw new Error(error);
+    }
+  }
+  const {mutate: updateProfile, isPending:isUpdating, error, isError} = useMutation({
+    mutationFn: handleUpdateProfile,
+    onError: (error)=>{
+      console.log(error)
     },
     onSuccess: () => {
       toast.success("Profile updated");
@@ -64,9 +68,6 @@ const EditProfilePageModal = ({ authUser }) => {
       queryClinet.invalidateQueries({ queryKey: ["user"] }),
         queryClinet.invalidateQueries({ queryKey: ["userAuth"] });
         navigate(`/profile/${authUser?.username}`)
-    },
-    onError: ()=>{
-      toast.error("Error")
     }
   });
 
@@ -74,6 +75,7 @@ const EditProfilePageModal = ({ authUser }) => {
     e.preventDefault()
     updateProfile()
   }
+
   return (
     <section className="flex justify-center w-full h-screen overflow-y-scroll">
       <form className="relative flex flex-col w-4/5 h-full mb-4" onSubmit={handleFormSubmit}>
@@ -197,6 +199,7 @@ const EditProfilePageModal = ({ authUser }) => {
           </label>
         </div>
 
+        {isError && <div className="text-red-500">{error.response.data.error}</div>}
         {/* Passoword */}
         <div className="flex w-full gap-2 px-2 py-2 bg-black border border-gray-400 rounded-md">
           <input

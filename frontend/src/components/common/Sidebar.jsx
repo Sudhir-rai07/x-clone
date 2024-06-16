@@ -16,8 +16,6 @@ const Sidebar = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  console.log(location.pathname.split("/"))
-
   const queryClient = useQueryClient();
   const { mutate: logout } = useMutation({
     mutationFn: async () => {

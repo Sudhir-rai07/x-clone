@@ -50,7 +50,7 @@ const Notification = ({ notification }) => {
           className="w-8 h-8 mr-2 overflow-hidden rounded-full"
         />
         <div>
-          <p className="flex items-center">{renderMessage() } <span className="ml-2 text-sm text-gray-500">{notificationTime}</span></p>
+          <div className="flex items-center">{renderMessage() } <span className="ml-2 text-sm text-gray-500">{notificationTime}</span></div>
           {!notification?.read && (
             <span className="text-sm text-blue-400">new</span>
           )}

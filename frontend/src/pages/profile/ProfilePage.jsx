@@ -45,7 +45,6 @@ const ProfilePage = () => {
   });
 
   const memberSince = formatMemberSinceDate(user?.data?.createdAt)
-  console.log(memberSince)
 
   useEffect(()=>{
     refetch()

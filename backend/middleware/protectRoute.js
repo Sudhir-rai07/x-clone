@@ -20,6 +20,7 @@ const protectRoute = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
+    console.log(error)
     console.log("Error in protectRouteMiddleware ", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
