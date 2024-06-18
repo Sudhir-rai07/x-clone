@@ -12,6 +12,9 @@ import { useQuery } from "@tanstack/react-query";
 import FollowSuggestion from "./components/common/FollowSuggestion";
 import EditProfilePageModal from "./pages/profile/EditProfilePageModal";
 import Feedback from "./pages/feedback/Feedback";
+import VerifyUser from "./pages/auth/verifyuser/VerifyUser";
+const host = window.location.hostname
+console.log(host)
 
 const App = () => {
   const handleAuthUser = async () => {
@@ -73,7 +76,12 @@ const App = () => {
         <Route
           path="/feedback"
           element={authUser ? <Feedback authUser={authUser}/> : <Navigate to={"/sign-in"} />}
+        /> 
+        <Route
+          path="/verify/user/:id/:token"
+          element={<VerifyUser />}
         />
+
       </Routes>
       {authUser && <FollowSuggestion />}
        <Toaster />

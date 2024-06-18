@@ -9,16 +9,16 @@ import axios, { isAxiosError } from "axios";
 import toast from "react-hot-toast";
 
 const EditProfilePageModal = ({ authUser }) => {
-  const [coverImg, setCoverImg] = useState( null);
-  const [profileImg, setProfileImg] = useState( null);
+  const [coverImg, setCoverImg] = useState(null);
+  const [profileImg, setProfileImg] = useState(null);
   const [fullName, setFullName] = useState(authUser?.fullName);
+  const [email, setEamil] = useState(authUser?.email);
   const [bio, setBio] = useState(authUser?.bio);
   const [link, setLink] = useState(authUser?.link);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleCoverImgChange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -47,6 +47,7 @@ const EditProfilePageModal = ({ authUser }) => {
         coverImg,
         profileImg,
         fullName,
+        email,
         bio,
         link,
         currentPassword,
@@ -56,29 +57,37 @@ const EditProfilePageModal = ({ authUser }) => {
       console.log(error.response);
       throw new Error(error);
     }
-  }
-  const {mutate: updateProfile, isPending:isUpdating, error, isError} = useMutation({
+  };
+  const {
+    mutate: updateProfile,
+    isPending: isUpdating,
+    error,
+    isError,
+  } = useMutation({
     mutationFn: handleUpdateProfile,
-    onError: (error)=>{
-      console.log(error)
+    onError: (error) => {
+      console.log(error);
     },
     onSuccess: () => {
       toast.success("Profile updated");
       Promise.all([]);
       queryClinet.invalidateQueries({ queryKey: ["user"] }),
         queryClinet.invalidateQueries({ queryKey: ["userAuth"] });
-        navigate(`/profile/${authUser?.username}`)
-    }
+      navigate(`/profile/${authUser?.username}`);
+    },
   });
 
-  const handleFormSubmit = (e) =>{
-    e.preventDefault()
-    updateProfile()
-  }
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    updateProfile();
+  };
 
   return (
     <section className="flex justify-center w-full h-screen overflow-y-scroll">
-      <form className="relative flex flex-col w-4/5 h-full mb-4" onSubmit={handleFormSubmit}>
+      <form
+        className="relative flex flex-col w-4/5 h-full mb-4"
+        onSubmit={handleFormSubmit}
+      >
         <div className="flex items-center justify-between w-full h-12 px-4">
           <Link to={`/profile/${authUser?.username}`}>
             <FaArrowLeft />
@@ -88,13 +97,13 @@ const EditProfilePageModal = ({ authUser }) => {
               type="submit"
               className="px-3 py-1 transition-colors duration-200 border border-gray-500 rounded-full hover:bg-blue-500 hover:text-black hover:border-blue-500"
             >
-              {isUpdating? "Updating...": "Save"}
+              {isUpdating ? "Updating..." : "Save"}
             </button>
           </div>
         </div>
         <div className="relative lg:w-full w-350px h-52">
           <img
-            src={(coverImg || authUser?.coverImg )|| "/cover.png"}
+            src={coverImg || authUser?.coverImg || "/cover.png"}
             alt=""
             className="object-cover w-full h-full rounded-lg"
           />
@@ -120,7 +129,9 @@ const EditProfilePageModal = ({ authUser }) => {
         <div className="relative w-24 h-24">
           <div className="absolute w-24 h-24 overflow-hidden border-2 border-black rounded-full -top-10">
             <img
-              src={(profileImg || authUser?.profileImg) || "/avatar-placeholder.png"}
+              src={
+                profileImg || authUser?.profileImg || "/avatar-placeholder.png"
+              }
               alt=""
               className="object-cover object-center h-full rounded-lg"
             />
@@ -144,81 +155,106 @@ const EditProfilePageModal = ({ authUser }) => {
           </div>
         </div>
 
-        {/* FullName */}
-        <div className="flex flex-col-reverse w-full px-2 py-2 mb-4 bg-black border border-gray-400 rounded-md">
-          <input
-            type="text"
-            id="fullName"
-            name="fullName"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            className="w-full bg-black outline-none peer"
-          />
-          <label
-            htmlFor="fullName"
-            className="text-sm text-gray-500 peer-focus:text-blue-500"
-          >
-            Full name
-          </label>
+
+        <div className="overflow-y-scroll no-scrollbar ">
+          {/* FullName */}
+          <div className="flex flex-col-reverse w-full px-2 py-2 mb-4 bg-black border border-gray-400 rounded-md">
+            <input
+              type="text"
+              id="fullName"
+              name="fullName"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              className="w-full bg-black outline-none peer"
+            />
+            <label
+              htmlFor="fullName"
+              className="text-sm text-gray-500 peer-focus:text-blue-500"
+            >
+              Full name
+            </label>
+          </div>
+
+          {/* Email */}
+          <div className="flex flex-col-reverse w-full px-2 py-2 mb-4 bg-black border border-gray-400 rounded-md">
+            <input
+              type="text"
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEamil(e.target.value)}
+              className="w-full bg-black outline-none peer"
+            />
+            <label
+              htmlFor="email"
+              className="flex justify-between text-sm text-gray-500 peer-focus:text-blue-500"
+            >
+              <span>Email</span>
+              <span className={`${authUser?.isVerified ? "text-green-500":""}`}>Verified</span>
+            </label>
+          </div>
+
+          {/* Bio */}
+          <div className="flex flex-col-reverse w-full px-2 py-2 mb-4 bg-black border border-gray-400 rounded-md">
+            <input
+              type="text"
+              id="bio"
+              name="bio"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              className="w-full bg-black outline-none peer"
+            />
+            <label
+              htmlFor="bio"
+              className="text-sm text-gray-500 peer-focus:text-blue-500"
+            >
+              Bio
+            </label>
+          </div>
+
+          {/* Link */}
+          <div className="flex flex-col-reverse w-full px-2 py-2 mb-4 bg-black border border-gray-400 rounded-md">
+            <input
+              type="text"
+              id="link"
+              name="link"
+              value={link}
+              onChange={(e) => setLink(e.target.value)}
+              className="w-full placeholder-gray-500 bg-black outline-none peer"
+              placeholder="add a website"
+            />
+            <label
+              htmlFor="bio"
+              className="text-sm text-gray-500 peer-focus:text-blue-500"
+            >
+              Link
+            </label>
+          </div>
+
+          {isError && (
+            <div className="text-red-500">{error.response.data.error}</div>
+          )}
+          {/* Passoword */}
+          <div className="flex w-full gap-2 px-2 py-2 bg-black border border-gray-400 rounded-md">
+            <input
+              type="password"
+              className="w-1/2 px-2 py-2 bg-black border rounded-md outline-none focus:border focus:border-blue-500"
+              name="currentPassword"
+              placeholder="current password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+            <input
+              type="password"
+              className="w-1/2 px-2 py-2 bg-black border rounded-md outline-none focus:border focus:border-blue-500"
+              name="newPassword"
+              placeholder="new password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </div>
         </div>
 
-        {/* Bio */}
-        <div className="flex flex-col-reverse w-full px-2 py-2 mb-4 bg-black border border-gray-400 rounded-md">
-          <input
-            type="text"
-            id="bio"
-            name="bio"
-            value={bio}
-            onChange={(e) => setBio(e.target.value)}
-            className="w-full bg-black outline-none peer"
-          />
-          <label
-            htmlFor="bio"
-            className="text-sm text-gray-500 peer-focus:text-blue-500"
-          >
-            Bio
-          </label>
-        </div>
-
-        {/* Link */}
-        <div className="flex flex-col-reverse w-full px-2 py-2 mb-4 bg-black border border-gray-400 rounded-md">
-          <input
-            type="text"
-            id="link"
-            name="link"
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
-            className="w-full placeholder-gray-500 bg-black outline-none peer"
-            placeholder="add a website"
-          />
-          <label
-            htmlFor="bio"
-            className="text-sm text-gray-500 peer-focus:text-blue-500"
-          >
-            Link
-          </label>
-        </div>
-
-        {isError && <div className="text-red-500">{error.response.data.error}</div>}
-        {/* Passoword */}
-        <div className="flex w-full gap-2 px-2 py-2 bg-black border border-gray-400 rounded-md">
-          <input
-            type="password"
-            className="w-1/2 px-2 py-2 bg-black border rounded-md outline-none focus:border focus:border-blue-500"
-            name="currentPassword"
-            placeholder="current password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-          />
-          <input
-            type="password"
-            className="w-1/2 px-2 py-2 bg-black border rounded-md outline-none focus:border focus:border-blue-500"
-            name="newPassword"
-            placeholder="new password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-        </div>
 
         <input
           type="file"
