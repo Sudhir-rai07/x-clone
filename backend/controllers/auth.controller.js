@@ -40,13 +40,13 @@ export const signup = async (req, res) => {
         user_id: newUser._id,
         token: crypto.randomBytes(16).toString("hex"),
       });
-
+      await token.save()
       await sendMail(email, newUser._id, token.token);
       if (!newUser.isVerified) {
         return res
           .status(400)
           .json({
-            error: "User not varified, verification link sent to your email",
+            error: "A verification link has been sent to your email",
           });
       }
       await generateTokenAndSetCookie(newUser._id, res);
@@ -77,11 +77,12 @@ export const login = async (req, res) => {
     const { username, password } = req.body;
 
     const user = await User.findOne({ username });
+    if(!user) return res.status(400).json({error: "User not found"})
     const isPasswordValid = await bcrypt.compare(
       password,
       user?.password || ""
     );
-    if (!user || !isPasswordValid)
+    if ( !isPasswordValid)
       return res.status(400).json({ error: "Incorrect username or password" });
 
     // Verificaition token

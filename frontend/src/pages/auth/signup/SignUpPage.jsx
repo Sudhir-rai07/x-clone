@@ -34,6 +34,9 @@ const SignUpPage = () => {
     error,
   } = useMutation({
     mutationFn: signUpUser,
+    onError: (error)=>{
+      console.log(error.response.data.error)
+    },
     onSuccess: ()=>{
       toast.success("Sign up successfully")
       queryClient.invalidateQueries({queryKey:["userAuth"]})
@@ -108,7 +111,7 @@ const SignUpPage = () => {
             />
           </div>
 
-          {isError && <div>{error.message}</div>}
+          {isError && <div className="text-red-400">{error.response.data.error}</div>}
           <div className="mx-auto w-60 ">
             <button
               type="submit"
