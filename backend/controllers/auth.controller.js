@@ -1,6 +1,9 @@
 import bcrypt from "bcryptjs";
 import User from "../models/user.model.js";
 import generateTokenAndSetCookie from "../utils/generateTokenAndSetCookie.js";
+import Token from "../models/token.model.js";
+import crypto from "crypto";
+import sendMail from "../utils/sendMail.js";
 
 export const signup = async (req, res) => {
   try {
@@ -30,8 +33,23 @@ export const signup = async (req, res) => {
     });
 
     if (newUser) {
-      await generateTokenAndSetCookie(newUser._id, res);
       await newUser.save();
+
+      // Verificaition token
+      const token = new Token({
+        user_id: newUser._id,
+        token: crypto.randomBytes(16).toString("hex"),
+      });
+
+      await sendMail(email, newUser._id, token.token);
+      if (!newUser.isVerified) {
+        return res
+          .status(400)
+          .json({
+            error: "User not varified, verification link sent to your email",
+          });
+      }
+      await generateTokenAndSetCookie(newUser._id, res);
 
       res.status(200).json({
         username: newUser.username,
@@ -60,29 +78,44 @@ export const login = async (req, res) => {
 
     const user = await User.findOne({ username });
     const isPasswordValid = await bcrypt.compare(
-        password,
+      password,
       user?.password || ""
     );
     if (!user || !isPasswordValid)
       return res.status(400).json({ error: "Incorrect username or password" });
 
+    // Verificaition token
+    const token = new Token({
+      user_id: user._id,
+      token: crypto.randomBytes(16).toString("hex"),
+    });
+
+    await token.save()
+    if (!user.isVerified) {
+     await sendMail(user.email, user._id, token.token);
+      return res
+        .status(400)
+        .json({
+          error:
+            "User not varified. A link has been sent to you email for verification",
+        });
+    }
+
     await generateTokenAndSetCookie(user._id, res);
 
-    res
-      .status(200)
-      .json({
-        message: "Logged in",
-        username: user.username,
-        fullName: user.fullName,
-        email: user.email,
-        followers: user.followers,
-        following: user.following,
-        profileImg: user.profileImg,
-        coverImg: user.coverImg,
-        bio: user.bio,
-        link: user.link,
-        likedPosts: user.likedPosts,
-      });
+    res.status(200).json({
+      message: "Logged in",
+      username: user.username,
+      fullName: user.fullName,
+      email: user.email,
+      followers: user.followers,
+      following: user.following,
+      profileImg: user.profileImg,
+      coverImg: user.coverImg,
+      bio: user.bio,
+      link: user.link,
+      likedPosts: user.likedPosts,
+    });
   } catch (error) {
     console.log("Error in Login controller", error.message);
     res.status(500).json({ error: "Internal server error" });
@@ -91,21 +124,39 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    res.cookie("token", "", { maxAge: 0})
-    res.status(200).json({message: "Logged out"})
-  }  catch (error) {
+    res.cookie("token", "", { maxAge: 0 });
+    res.status(200).json({ message: "Logged out" });
+  } catch (error) {
     console.log("Error in Logout controller", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
 export const getMe = async (req, res) => {
-try {
-  const user = req.user
-  res.status(200).json(user)
-  
-} catch (error) {
-  console.log("Error in getme controller", error.message);
-  res.status(500).json({ error: "Internal server error" });
-}
+  try {
+    const user = req.user;
+    res.status(200).json(user);
+  } catch (error) {
+    console.log("Error in getme controller", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const verifyUser = async (req, res) => {
+  const { id: userId, token: verifyToken } = req.params;
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(400).json({ error: "User not found" });
+
+    if(user.isVerified) return res.status(200).json({message: "Already verified.\n Please login", success: true})
+
+    const token = await Token.findOne({token: verifyToken})
+    if (!token) return res.status(400).json({ error: "token not found", success:false });
+
+    await User.findByIdAndUpdate(userId, { isVerified: true });
+    await Token.findOneAndUpdate({ token: verifyToken }, { token: null });
+    return res.status(200).json({ message: "User varified successfully", success:true});
+  } catch (error) {
+    console.log("Error in verifyUser controller", error);
+  }
 };
