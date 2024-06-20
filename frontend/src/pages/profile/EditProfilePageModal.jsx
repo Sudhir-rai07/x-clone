@@ -181,8 +181,8 @@ const EditProfilePageModal = ({ authUser }) => {
               type="text"
               id="email"
               name="email"
+              readOnly
               value={email}
-              onChange={(e) => setEamil(e.target.value)}
               className="w-full bg-black outline-none peer"
             />
             <label

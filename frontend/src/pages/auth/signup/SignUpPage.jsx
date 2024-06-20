@@ -29,9 +29,11 @@ const SignUpPage = () => {
 
   const {
     mutate: userSignUp,
+    data:signUpData,
     isPending,
     isError,
     error,
+    isSuccess
   } = useMutation({
     mutationFn: signUpUser,
     onError: (error)=>{
@@ -112,6 +114,7 @@ const SignUpPage = () => {
           </div>
 
           {isError && <div className="text-red-400">{error.response.data.error}</div>}
+          {isSuccess && <div className="text-green-400">{signUpData.data?.message}</div>}
           <div className="mx-auto w-60 ">
             <button
               type="submit"

@@ -13,8 +13,8 @@ import FollowSuggestion from "./components/common/FollowSuggestion";
 import EditProfilePageModal from "./pages/profile/EditProfilePageModal";
 import Feedback from "./pages/feedback/Feedback";
 import VerifyUser from "./pages/auth/verifyuser/VerifyUser";
-const host = window.location.hostname
-console.log(host)
+import ForgetPassword from "./pages/auth/forgetPassword/ForgetPassword";
+import ResetPassword from "./pages/auth/forgetPassword/ResetPassword";
 
 const App = () => {
   const handleAuthUser = async () => {
@@ -80,6 +80,14 @@ const App = () => {
         <Route
           path="/verify/user/:id/:token"
           element={<VerifyUser />}
+        />
+        <Route
+          path="/forget-password"
+          element={<ForgetPassword />}
+        />
+        <Route
+          path="/reset-password/:token"
+          element={<ResetPassword />}
         />
 
       </Routes>

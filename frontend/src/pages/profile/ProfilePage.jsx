@@ -107,7 +107,7 @@ const {data: posts} = useQuery({queryKey: ["posts"]})
             <img
               src={user?.data?.profileImg || "/avatar-placeholder.png"}
               alt=""
-              className="object-center w-full h-full bg-cover rounded-full"
+              className="object-cover w-full h-full transition-opacity duration-200 ease-in-out rounded-full"
             />
           </div>
           <div className="relative">

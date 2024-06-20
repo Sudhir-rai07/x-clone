@@ -66,12 +66,14 @@ const Post = ({ post }) => {
   }
   return (
     <div className="flex w-full px-4 py-2 border-b border-gray-400">
-      <div className="w-10 h-10 mr-2 overflow-hidden rounded-full cursor-pointer">
-        <img
+      <div className="w-8 h-8 mr-2 overflow-hidden rounded-full cursor-pointer ">
+       <Link to={`/profile/${post?.user?.username}`}>
+       <img
           src={post?.user?.profileImg || '/avatar-placeholder.png'}
           alt=""
-          className="w-full h-full bg-center bg-cover"
+          className="object-cover w-full h-full rounded-full"
         />
+       </Link>
       </div>
       <div className="flex-col items-center w-full">
         <div className="flex items-center w-full">
@@ -123,8 +125,8 @@ const Post = ({ post }) => {
 
           {/* Like */}
           <div className="flex items-center cursor-pointer" onClick={handleLikePost}>
-          {isLiked && !isLiking && <FaRegHeart className='w-4 h-4 cursor-pointer text-pink-500 ' />}
-          {!isLiked && !isLiking && <FaRegHeart className='w-4 h-4 cursor-pointer text-gray-500 group-hover:text-pink-500' />}
+          {isLiked && !isLiking && <FaRegHeart className='w-4 h-4 text-pink-500 cursor-pointer ' />}
+          {!isLiked && !isLiking && <FaRegHeart className='w-4 h-4 text-gray-500 cursor-pointer group-hover:text-pink-500' />}
                 <span className={`${isLiked ? "text-pink-500":"text-gray-500"} ml-1`}>{post?.likes.length}</span>
           </div>
         </div>
