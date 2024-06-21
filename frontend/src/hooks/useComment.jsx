@@ -17,7 +17,7 @@ const useComment = () =>{
         onSuccess: ()=>{
             toast.success("Comment posted")
             queryClient.invalidateQueries({queryKey:["posts"]})
-            queryClient.invalidateQueries({queryKey:["singlePosts"]})
+            queryClient.invalidateQueries({queryKey:["singlePost"]})
         }
     })
 
