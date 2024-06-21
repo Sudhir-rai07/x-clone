@@ -1,46 +1,72 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import useFollow from "../../hooks/useFollow";
 import { Link } from "react-router-dom";
 
 const FollowSuggestion = () => {
-const {follow, isPending} = useFollow()
-
-  const {data: suggestedUsers, isLoading, isError, error} = useQuery({
+  const { follow, isPending } = useFollow();
+  const [text, setText] = useState("Follow")
+  const {
+    data: suggestedUsers,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ["suggestedUsers"],
-    queryFn: async () =>{
+    queryFn: async () => {
       try {
-        return await axios.get("/api/users/suggested")
+        return await axios.get("/api/users/suggested");
       } catch (error) {
-        console.log(error)
-        throw new Error(error)
+        console.log(error);
+        throw new Error(error);
       }
-    }
-  })
+    },
+  });
 
-if(isLoading) return <LoadingSpinner />
+  if (isLoading) return <LoadingSpinner />;
 
   return (
-    <section className="hidden w-[30%] h-full px-2 py-1 border-l-2 border-gray-500 lg:flex">
-        <div className="flex-col px-4 border border-gray-700 rounded-lg ">
-      {suggestedUsers && suggestedUsers.data.map((user)=>(
-        <div className="flex items-center w-full my-2" key={user._id}> 
-        <div className="w-8 h-8 mr-2 overflow-hidden rounded-full">
-          <Link to={`/profile/${user?.username}`}><img src={user?.profileImg || "/avatar-placeholder.png"} alt="" className="object-cover object-center"/></Link>
-        </div>
-        <div className="text-sm">
-          <div><Link to={`/profile/${user?.username}`}>{user?.fullName}</Link></div>
-          <div className="text-gray-600"><Link to={`/profile/${user?.username}`}>@{user?.username}</Link></div>
-        </div>
-        <div className="flex ml-auto">
-          <button onClick={()=>follow(user?._id)} className="px-4 py-1 ml-4 transition-colors duration-200 border border-gray-500 rounded-full hover:bg-white hover:text-black">
-           {"Follow"}
-          </button>
-        </div>
-        </div>
-      ))}
+    <section className="hidden w-[30%] h-full px-2 py-1 lg:flex">
+      <div className="flex-col px-4 border border-gray-700 rounded-lg ">
+        {suggestedUsers &&
+          suggestedUsers.data.map((user) => (
+            <div className="flex items-center w-full my-2" key={user._id}>
+              <div className="w-8 h-8 mr-2 overflow-hidden rounded-full">
+                <Link to={`/profile/${user?.username}`}>
+                  <img
+                    src={user?.profileImg || "/avatar-placeholder.png"}
+                    alt=""
+                    className="object-cover object-center"
+                  />
+                </Link>
+              </div>
+              <div className="text-sm">
+                <div>
+                  <Link to={`/profile/${user?.username}`}>
+                    {user?.fullName}
+                  </Link>
+                </div>
+                <div className="text-gray-600">
+                  <Link to={`/profile/${user?.username}`}>
+                    @{user?.username}
+                  </Link>
+                </div>
+              </div>
+              <div className="flex ml-auto">
+                <button
+                  onClick={() => {
+                    follow(user?._id);
+                    setText("Following")
+                  }}
+                  className="px-4 py-1 ml-4 transition-colors duration-200 border border-gray-500 rounded-full hover:bg-white hover:text-black"
+                >
+                  {text}
+                </button>
+              </div>
+            </div>
+          ))}
       </div>
     </section>
   );

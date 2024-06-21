@@ -15,6 +15,7 @@ import Feedback from "./pages/feedback/Feedback";
 import VerifyUser from "./pages/auth/verifyuser/VerifyUser";
 import ForgetPassword from "./pages/auth/forgetPassword/ForgetPassword";
 import ResetPassword from "./pages/auth/forgetPassword/ResetPassword";
+import PostPage from "./pages/post/PostPage";
 
 const App = () => {
   const handleAuthUser = async () => {
@@ -77,6 +78,11 @@ const App = () => {
           path="/feedback"
           element={authUser ? <Feedback authUser={authUser}/> : <Navigate to={"/sign-in"} />}
         /> 
+        <Route
+          path="/:username/post/:postid"
+          element={<PostPage authUser={authUser} />}
+        /> 
+
         <Route
           path="/verify/user/:id/:token"
           element={<VerifyUser />}

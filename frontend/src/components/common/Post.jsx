@@ -13,34 +13,23 @@ import LoadingSpinner from "./LoadingSpinner";
 import AddCommentModal from "./AddCommentModal";
 import { formatPostDate } from "../../utils/date";
 import { Link } from "react-router-dom";
+import useLikePost from "../../hooks/useLikePost";
+import { FaShare } from "react-icons/fa6";
+import sharePost from "../../utils/share/sharePost";
 
 const Post = ({ post }) => {
-  const [openCommentModal, setOpenCommentModal] = useState(false);
   const queryClient = useQueryClient();
+  const [openCommentModal, setOpenCommentModal] = useState(false);
+  const {likePost, isPending:isLiking} = useLikePost()
+
   const { data: authUser } = useQuery({ queryKey: ["userAuth"] });
 
   const isMyPost = post?.user?._id === authUser?._id;
-  const isLiked = post?.likes.includes(authUser?._id)
+  const isLiked = post?.likes?.includes(authUser?._id)
 
 
+  // Format date
   const formatDate = formatPostDate(post?.createdAt)
-
-  // Like Post
-  const {mutate: likePost, isPending: isLiking} = useMutation({
-    mutationFn: async () =>{
-      try {
-        return await axios.put(`/api/posts/like/${post._id}`)
-      } catch (error) {
-        console.log(error)
-        throw new Error(error)
-      }
-    },
-    onSuccess: (updatedLikes)=>{
-      console.log(updatedLikes)
-      queryClient.invalidateQueries({queryKey: ["posts"]})
-    }
-  })
-
   // Delete Post
   const { mutate: deletePost, isPending } = useMutation({
     mutationFn: async () => {
@@ -62,7 +51,7 @@ const Post = ({ post }) => {
 
   const handleLikePost = () =>{
     if(isLiking) return;
-    likePost()
+    likePost(post?._id)
   }
   return (
     <div className="flex w-full px-4 py-2 border-b border-gray-400">
@@ -92,6 +81,7 @@ const Post = ({ post }) => {
         </div>
 
         <div className="w-full">
+        <Link to={`/${post?.user?.username}/post/${post?._id}`} className="w-full">
           <p className="w-4/5">{post?.text}</p>
           {post?.img && (
             <div>
@@ -102,6 +92,7 @@ const Post = ({ post }) => {
               />
             </div>
           )}
+          </Link>
         </div>
 
         <div className="flex items-center mt-2 justify-evenly">
@@ -111,7 +102,7 @@ const Post = ({ post }) => {
               className="mr-1 cursor-pointer"
               onClick={handleCommentModalView}
             />
-            {post.comments.length}
+            {post?.comments?.length}
             <div
               className={`${
                 openCommentModal
@@ -119,7 +110,7 @@ const Post = ({ post }) => {
                   : "hidden"
               }`}
             >
-              <AddCommentModal setModalView={handleCommentModalView} post={post} comment={post.comments}/>
+              <AddCommentModal setModalView={handleCommentModalView} post={post} comment={post?.comments}/>
             </div>
           </div>
 
@@ -127,8 +118,16 @@ const Post = ({ post }) => {
           <div className="flex items-center cursor-pointer" onClick={handleLikePost}>
           {isLiked && !isLiking && <FaRegHeart className='w-4 h-4 text-pink-500 cursor-pointer ' />}
           {!isLiked && !isLiking && <FaRegHeart className='w-4 h-4 text-gray-500 cursor-pointer group-hover:text-pink-500' />}
-                <span className={`${isLiked ? "text-pink-500":"text-gray-500"} ml-1`}>{post?.likes.length}</span>
+                <span className={`${isLiked ? "text-pink-500":"text-gray-500"} ml-1`}>{post?.likes?.length}</span>
           </div>
+
+          {/* Share post */}
+          <div className="ml-4">
+                  <FaShare
+                    className="cursor-pointer"
+                    onClick={()=> sharePost(window.location.href)}
+                  />
+                </div>
         </div>
       </div>
       {/* <hr className="w-full h-[1px] bg-gray-400 border-none mt-2"/> */}

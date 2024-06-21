@@ -150,6 +150,27 @@ export const getAllPosts = async (req, res) =>{
       }
 }
 
+export const getPost = async (req, res) =>{
+  const {postid} = req.params;
+  try {
+    const post = await Post.findById(postid).populate({
+      path: "user",
+      select: "-password"
+    })
+    .populate({
+      path: "comments.user",
+      select: "-password"
+    })
+    if(!post) return res.status(400).json({error: "Post not found"})
+    
+    res.status(200).json(post)
+    
+  } catch (error) {
+    console.log("Error in getPost controller : ", error)
+    res.status(500).json({error: "Internal server error"})
+  }
+}
+
 export const getLikedPosts = async (req, res) =>{
   const {_id: userId} = req.user
   try {

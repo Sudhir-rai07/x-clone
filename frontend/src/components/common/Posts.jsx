@@ -13,16 +13,12 @@ const Posts = ({ feedType, userId }) => {
     switch (feedType) {
       case "forYou":
         return "/api/posts/all";
-        break;
       case "following":
         return "/api/posts/following";
-        break;
       case "posts":
         return `/api/posts/user/${username}`;
-        break;
       case "likes":
         return `/api/posts/liked`;
-        break;
       default:
         return "/api/posts/all";
     }

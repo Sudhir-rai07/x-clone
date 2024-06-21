@@ -1,45 +1,26 @@
 import React, { useState } from "react";
-import axios from "axios";
-
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 import { IoMdSend } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
 import { Link } from "react-router-dom";
+import useComment from "../../hooks/useComment";
+import { formatPostDate } from "../../utils/date";
 
 const AddCommentModal = ({ setModalView, post, comment }) => {
   const [text, setText] = useState("");
-    const queryClient = useQueryClient()
+  const { commentOnPost, isPending } = useComment();
 
-  const {
-    mutate: commentOnPost,
-    error,
-    isError,
-  } = useMutation({
-    mutationFn: async () => {
-      try {
-        return await axios.post(`/api/posts/comment/${post._id}`, { text });
-      } catch (error) {
-        console.log(error.response);
-        throw new Error(error);
-      }
-    },
-    onSuccess: () => {
-      toast.success("Comment posted");
-      setText("");
-      queryClient.invalidateQueries({queryKey: ["posts"]})
-    },
-    onError: (error) => {
-      toast.error("error");
-      console.log(error);
-    },
-  });
+  // Format date
+  const createdAt = formatPostDate(comment?.createdAt)
 
+
+  // handle comment on a post
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(!text) return toast.error("A comment must have a text")
-    commentOnPost();
+    if (!text) return toast.error("A comment must have a text");
+    commentOnPost({postId: post?._id, text:text});
+    setText("");
   };
   return (
     <div className="flex-col items-center justify-center w-full h-full py-4 overflow-y-scroll bg-black">
@@ -62,11 +43,13 @@ const AddCommentModal = ({ setModalView, post, comment }) => {
             </div>
 
             <div>
-              <Link className="text-[10px] flex" to={`/profile/${comment.user?.username}`}>
+              <Link
+                className="text-[10px] flex"
+                to={`/profile/${comment.user?.username}`}
+              >
                 <p className="mr-1 font-semibold">{comment.user?.fullName}</p>
-                <p className="text-gray-400 ">
-                  @{comment.user?.username}
-                </p>
+                <p className="text-gray-400 ">@{comment.user?.username} . </p>
+                <p className="text-gray-400 ">&nbsp; {createdAt}</p>
               </Link>
 
               <div className="text-sm">
