@@ -59,8 +59,6 @@ const PostPage = ({ authUser }) => {
     <h2 className="text-2xl">Post not found ☹️</h2>
     <img src="https://media4.giphy.com/media/eIsBUaOERJ3MrkkBL3/200w.webp?cid=ecf05e473vcuv6o1dlaivq6p028q6lf47zk5nx7p9j6psres&ep=v1_gifs_related&rid=200w.webp&ct=g" alt="" className="rounded-full" />
   </div>)
-
-if(isFetching) return <LoadingSpinner />
   return (
     <div className="h-screen w-[40rem] lg:w-[60%] overflow-y-scroll relative overflow-x-hidden px-4">
       <nav className="sticky top-0 flex items-center w-full h-10 pb-2 border-gray-500 backdrop-blur-lg">
