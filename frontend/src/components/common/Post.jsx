@@ -72,10 +72,22 @@ const Post = ({ post }) => {
           <span className="mx-auto ">
             {isPending && <LoadingSpinner />}
             {!isPending && isMyPost && (
-              <FaTrash
-                className="text-white transition-colors duration-100 cursor-pointer active:text-red-600"
-                onClick={() => deletePost()}
-              />
+              <div>
+              <div className="relative ml-2 rounded-full dropdown dropdown-top -left-2 md:left-0">
+              <div tabIndex={0} role="button" className="w-8 h-8 overflow-hidden font-bold rounded-full">
+                . . .
+              </div>
+              <ul
+                tabIndex={0}
+                className="dropdown-content flex flex-col gap-1 z-[1] menu p-2 shadow bg-gray-800 rounded-lg w-28"
+              >
+                <li className="text-red-500 transition-colors duration-200 rounded-lg hover:bg-white">
+                  <a onClick={deletePost}>Delete</a>
+                </li>
+              </ul>
+            </div>
+              </div>
+              
             )}
           </span>
         </div>

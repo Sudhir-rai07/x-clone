@@ -53,11 +53,11 @@ const SignUpPage = () => {
   };
 
   return (
-    <div className="flex w-full h-screen max-w-screen-xl pt-10 pl-4 mx-auto lg:pl-0">
+    <div className="flex w-full h-screen max-w-screen-xl pt-10 mx-auto lg:pl-0">
       <section className="items-center justify-center hidden w-full sm:flex sm:w-1/2">
         <Xsvg height={400} width={400} className=" sm:w-3/6 fill-white" />
       </section>
-      <section className="flex flex-col items-center w-full lg:justify-start sm:w-1/2">
+      <section className="flex flex-col items-center justify-center w-full sm:w-1/2">
         <h2 className="mt-8 text-3xl font-bold lg:text-5xl md:text-3xl">Connecting now</h2>
         <h2 className="mt-4 text-2xl font-bold lg:mt-8 lg:text-4xl">Join today.</h2>
         <form className="w-64 mt-8" onSubmit={handleSubmit}>
