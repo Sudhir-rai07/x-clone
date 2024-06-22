@@ -10,6 +10,11 @@ const tokenSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
+    tokenType:{
+        type: String,
+        require: true,
+        enum: ["password-reset", "user-verification"]
+    },
     expireAt:{
         type: Date, 
         default: Date.now(),

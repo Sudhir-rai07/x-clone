@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import XSvg from "../../../components/svgs/X";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -32,7 +32,7 @@ const ResetPassword = () => {
     resetPassword()
   };
 
-  const {mutate:resetPassword, isError, error:mutationError, isPending} = useMutation({
+  const {mutate:resetPassword, isError, error:mutationError, isPending,isSuccess} = useMutation({
     mutationFn: async ()=>{
         await axios.post(`/api/auth/reset-password/${token}`, {password})
     },
@@ -46,13 +46,13 @@ const ResetPassword = () => {
         setConfirmPassword("")
         
         setTimeout(() => {
-            navigate("/sign-in")
         }, 1000);
         
     }
   })
 
   if(isPending) text="Wait..."
+  if(isSuccess) return <ResetPasswordSuccess />
 
   return (
     <div className="w-full h-screen">
@@ -118,4 +118,17 @@ const ResetPassword = () => {
   );
 };
 
+const ResetPasswordSuccess = () =>{
+  return(
+    <>
+      <div className="flex items-center justify-center w-full h-screen">
+        <div className="flex flex-col items-center justify-center w-full h-full">
+          <img src="/success.png" className="h-40"/>
+          <h2>Your password has been updated.</h2>
+          <Link to={'/sign-in'} className="text-blue-500 hover:underline">Sign-in</Link>
+        </div>
+      </div>
+    </>
+  )
+}
 export default ResetPassword;

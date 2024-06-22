@@ -39,6 +39,7 @@ export const signup = async (req, res) => {
       const token = new Token({
         user_id: newUser._id,
         token: crypto.randomBytes(16).toString("hex"),
+        tokenType: "user-verification"
       });
       await token.save();
 
@@ -100,6 +101,7 @@ export const login = async (req, res) => {
     const token = new Token({
       user_id: user._id,
       token: crypto.randomBytes(16).toString("hex"),
+      tokenType: "user-verification"
     });
 
     await token.save();
@@ -177,6 +179,7 @@ export const verifyUser = async (req, res) => {
     const token = await Token.findOne({ token: verifyToken });
     if (!token)
       return res.status(400).json({ error: "token not found", success: false });
+    if(token.tokenType !== "user-verification") return res.status(400).json({error: "Invalid token"})
 
     await User.findByIdAndUpdate(userId, { isVerified: true });
     await Token.findOneAndUpdate({ token: verifyToken }, { token: null });
@@ -201,6 +204,7 @@ export const forgetPassword = async (req, res) => {
     const newToken = new Token({
       user_id: user._id,
       token: passwordResetToken,
+      tokenType: "password-reset"
     });
     await newToken.save();
 
@@ -235,6 +239,8 @@ export const resetPassword = async (req, res) => {
     if(!passwordResetToken) return res.status(400).json({error: "Token not found"})
     const token = await Token.findOne({ token: passwordResetToken });
     if (!token) return res.status(400).json({ error: "Invalid token" });
+
+    if(token.tokenType !== "password-reset") return res.status(400).json({error: "Invalid token"})
 
     const user = await User.findById(token.user_id);
     if (!user) return res.status(400).json({ error: "User not found" });

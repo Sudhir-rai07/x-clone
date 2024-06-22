@@ -11,10 +11,6 @@ const AddCommentModal = ({ setModalView, post, comment }) => {
   const [text, setText] = useState("");
   const { commentOnPost, isPending } = useComment();
 
-  // Format date
-  const createdAt = formatPostDate(comment?.createdAt)
-
-
   // handle comment on a post
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -23,7 +19,7 @@ const AddCommentModal = ({ setModalView, post, comment }) => {
     setText("");
   };
   return (
-    <div className="flex-col items-center justify-center w-full h-full py-4 overflow-y-scroll bg-black">
+    <div className="flex-col items-center justify-center w-full h-full py-4 overflow-y-scroll bg-black no-scrollbar">
       {post.comments.length === 0 ? (
         <div className="text-center">No comments yet</div>
       ) : (
@@ -49,7 +45,7 @@ const AddCommentModal = ({ setModalView, post, comment }) => {
               >
                 <p className="mr-1 font-semibold">{comment.user?.fullName}</p>
                 <p className="text-gray-400 ">@{comment.user?.username} . </p>
-                <p className="text-gray-400 ">&nbsp; {createdAt}</p>
+                <p className="text-gray-400 ">&nbsp; {formatPostDate(comment?.createdat)}</p>
               </Link>
 
               <div className="text-sm">

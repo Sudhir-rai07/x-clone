@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 
 const FollowSuggestion = () => {
   const { follow, isPending } = useFollow();
-  const [text, setText] = useState("Follow")
   const {
     data: suggestedUsers,
     isLoading,
@@ -28,7 +27,7 @@ const FollowSuggestion = () => {
   if (isLoading) return <LoadingSpinner />;
 
   return (
-    <section className="hidden w-[30%] h-full px-2 py-1 lg:flex">
+    <section className="hidden lg:w-[30%] h-full px-2 py-1 lg:flex">
       <div className="flex-col px-4 border border-gray-700 rounded-lg ">
         {suggestedUsers &&
           suggestedUsers.data.map((user) => (
@@ -38,7 +37,7 @@ const FollowSuggestion = () => {
                   <img
                     src={user?.profileImg || "/avatar-placeholder.png"}
                     alt=""
-                    className="object-cover object-center"
+                    className="object-cover object-center w-full h-full"
                   />
                 </Link>
               </div>
@@ -62,7 +61,7 @@ const FollowSuggestion = () => {
                   }}
                   className="px-4 py-1 ml-4 transition-colors duration-200 border border-gray-500 rounded-full hover:bg-white hover:text-black"
                 >
-                  {text}
+                  {"Follow"}
                 </button>
               </div>
             </div>

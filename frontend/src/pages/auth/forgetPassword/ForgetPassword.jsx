@@ -7,26 +7,23 @@ import toast from "react-hot-toast";
 
 const ForgetPassword = () => {
     const [text, setText] = useState("")
-    const navigate = useNavigate()
     const handlePasswordRecovery = async () =>{
         const response = await axios.post(`/api/auth/forget-password/`, {text})
         return response.data
     }
-    const {mutate:sendPasswordRecoveryMail, data:responseData, isError, error} = useMutation({
+    const {mutate:sendPasswordRecoveryMail, data:responseData, isError, error, isSuccess} = useMutation({
         mutationFn: handlePasswordRecovery,
         onError: (error)=>{
             console.log(error)
             toast.error("error")
         },
         onSuccess: ()=>{
-            toast.success("Recovery email sent")
             setText("")
             console.log(responseData)
-            navigate("/sign-in")
         }
     })
     console.log(responseData)
-    if(isError) console.log(error)
+      if(isSuccess) return <PasswordResetLinkSent />
   return (
     <div className="flex flex-col justify-center w-full h-screen px-4 sm:px-8">
     <div className="flex flex-row w-full h-14">
@@ -62,5 +59,19 @@ const ForgetPassword = () => {
     </div>
   );
 };
+
+const PasswordResetLinkSent = () =>{
+  return(
+    <>
+      <div className="flex items-center justify-center w-full h-screen">
+        <div className="flex flex-col items-center justify-center w-full h-full">
+          <img src="/success.png" className="h-40"/>
+          <h2>A password reset link has been set to your email.</h2>
+          <Link to={'/sign-in'} className="text-blue-500 hover:underline">Sign-in</Link>
+        </div>
+      </div>
+    </>
+  )
+}
 
 export default ForgetPassword;
