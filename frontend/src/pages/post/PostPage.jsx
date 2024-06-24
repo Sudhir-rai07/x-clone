@@ -36,7 +36,7 @@ const PostPage = ({ authUser }) => {
   } = useQuery({
     queryKey: ["singlePost"],
     queryFn: async () => {
-      const response = await axios.get(`/api/posts/${postid}`);
+      const response = await axios.get(`/api/posts/id/${postid}`);
       return response.data;
     },
   });

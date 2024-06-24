@@ -1,17 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState } from "react";
-import LoadingSpinner from "./LoadingSpinner";
 import useFollow from "../../hooks/useFollow";
 import { Link } from "react-router-dom";
+import FollowSuggestionSkeleton from "../skeletons/FollowSuggestionSkeleton";
 
 const FollowSuggestion = () => {
-  const { follow, isPending } = useFollow();
+  const { follow, isPending, } = useFollow();
   const {
     data: suggestedUsers,
     isLoading,
     isError,
     error,
+    isRefetching
   } = useQuery({
     queryKey: ["suggestedUsers"],
     queryFn: async () => {
@@ -24,7 +25,7 @@ const FollowSuggestion = () => {
     },
   });
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading || isRefetching) return <FollowSuggestionSkeleton />
 
   return (
     <section className="hidden lg:w-[30%] h-full px-2 py-1 lg:flex">

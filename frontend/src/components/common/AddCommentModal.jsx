@@ -45,7 +45,6 @@ const AddCommentModal = ({ setModalView, post, comment }) => {
               >
                 <p className="mr-1 font-semibold">{comment.user?.fullName}</p>
                 <p className="text-gray-400 ">@{comment.user?.username} . </p>
-                <p className="text-gray-400 ">&nbsp; {formatPostDate(comment?.createdat)}</p>
               </Link>
 
               <div className="text-sm">
