@@ -143,7 +143,7 @@ const Sidebar = () => {
           </div>
         )}
 
-        <div className="items-baseline hidden md:flex">
+        <div className="items-baseline hidden lg:flex">
               <a
                 href="https://buymeacoffee.com/sudhirrai" className="flex items-center text-xl text-yellow-400">Buy me coffee <FaCoffee className="ml-2"/></a>
             </div>

@@ -14,17 +14,17 @@ const protectRoute = async (req, res, next) => {
         .status(400)
         .json({ error: "Unauthorised - provide a valid token" });
 
-    const user = await User.findById(verifyToken.userId).select("-password")
+    const user = await User.findById(verifyToken.userId)
+      .select("-password")
     if (!user) return res.status(400).json({ error: "Can't find user!" });
 
     req.user = user;
     next();
   } catch (error) {
-    console.log(error)
+    console.log(error);
     console.log("Error in protectRouteMiddleware ", error.message);
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
-
-export default protectRoute
+export default protectRoute;
