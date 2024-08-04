@@ -3,11 +3,10 @@ import http from 'http'
 import { Server } from 'socket.io'
 
 const app = express()
-const origin = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://x-clone-xast.onrender.com"
 const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
-        origin: origin,
+        origin: 'http://localhost:3000',
      methods: ["GET", "POST"],
                 credentials: true,
                 transports: ['websocket', 'polling'],
