@@ -10,7 +10,7 @@ export const SocketContextProvider = ({ children }) => {
   const {data: authUser} = useQuery({queryKey: ["userAuth"]})
 
   useEffect(() => {
-    const socket = io("http://localhost:5000", {
+    const socket = io("https://x-clone-xast.onrender.com", {
         query: {
             userId : authUser?._id
         }
