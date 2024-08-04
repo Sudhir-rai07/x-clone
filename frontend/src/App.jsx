@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/auth/login/LoginPage";
 import SignUpPage from "./pages/auth/signup/SignUpPage";
@@ -7,8 +7,9 @@ import ProfilePage from "./pages/profile/ProfilePage";
 import NotificationPage from "./pages/notification/NotificationPage";
 
 import { Toaster } from "react-hot-toast";
-import Sidebar from "./components/common/Sidebar";
 import { useQuery } from "@tanstack/react-query";
+
+import Sidebar from "./components/common/Sidebar";
 import FollowSuggestion from "./components/common/FollowSuggestion";
 import EditProfilePageModal from "./pages/profile/EditProfilePageModal";
 import Feedback from "./pages/feedback/Feedback";
@@ -16,6 +17,7 @@ import VerifyUser from "./pages/auth/verifyuser/VerifyUser";
 import ForgetPassword from "./pages/auth/forgetPassword/ForgetPassword";
 import ResetPassword from "./pages/auth/forgetPassword/ResetPassword";
 import PostPage from "./pages/post/PostPage";
+import ChatHome from "./components/chat/ChatHome";
 
 const App = () => {
   const handleAuthUser = async () => {
@@ -41,15 +43,18 @@ const App = () => {
     queryFn: handleAuthUser,
   });
 
+const location = useLocation()
+const isChatApp = location.pathname.startsWith("/message")
+
   if (isLoading) return "Loading...";
   if (isError) return <h1>Error</h1>;
   return (
     <div className="flex max-w-6xl mx-auto">
-      {authUser && <Sidebar />}
+      {authUser && !isChatApp && <Sidebar />}
       <Routes>
         <Route
           path="/"
-          element={authUser ? <HomePage /> : <Navigate to={"/sign-up"} />}
+          element={authUser ? <HomePage /> : <Navigate to={"/sign-in"} />}
         />
         <Route
           path="/sign-in"
@@ -75,6 +80,11 @@ const App = () => {
         />
         
         <Route
+          path="/message"
+          element={authUser ? <ChatHome authUser={authUser}/> : <Navigate to={"/sign-in"} />}
+        />  
+        
+        <Route
           path="/feedback"
           element={authUser ? <Feedback authUser={authUser}/> : <Navigate to={"/sign-in"} />}
         /> 
@@ -97,7 +107,7 @@ const App = () => {
         />
 
       </Routes>
-      {authUser && <FollowSuggestion />}
+      {authUser && !isChatApp && <FollowSuggestion />}
        <Toaster />
     </div>
   );

@@ -156,7 +156,7 @@ const EditProfilePageModal = ({ authUser }) => {
         </div>
 
 
-        <div className="overflow-y-scroll no-scrollbar ">
+        <div className="overflow-y-scroll ">
           {/* FullName */}
           <div className="flex flex-col-reverse w-full px-2 py-2 mb-4 bg-black border border-gray-400 rounded-md">
             <input

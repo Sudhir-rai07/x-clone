@@ -6,7 +6,10 @@ import { Link, useParams } from "react-router-dom";
 
 import LoadingSpinner from "../../components/common/LoadingSpinner";
 import CreatePost from "../../components/common/CreatePost";
+import Following from "../../utils/followers&following/Following";
 import Posts from "../../components/common/Posts";
+
+
 import useFollow from "../../hooks/useFollow";
 import { formatMemberSinceDate } from "../../utils/date/index.js";
 
@@ -14,11 +17,10 @@ import { MdAdd } from "react-icons/md";
 import { FaArrowLeft } from "react-icons/fa";
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoMdLink } from "react-icons/io";
-import Following from "../../utils/followers&following/Following.jsx";
 
 const ProfilePage = () => {
   const [feedType, setFeedType] = useState("posts");
-  const [text, setText] = useState("")
+  const [text, setText] = useState("");
   const [viewPostModal, setViewPostModal] = useState(false);
   const [viewFollowers, setViewFollowers] = useState(false);
 
@@ -40,8 +42,8 @@ const ProfilePage = () => {
   } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-          const response = await axios.get(`/api/users/profile/${username}`)
-          return response.data
+      const response = await axios.get(`/api/users/profile/${username}`);
+      return response.data;
     },
   });
 
@@ -150,14 +152,8 @@ const ProfilePage = () => {
             </div>
             <div>
               {" "}
-              <a
-                href={user?.link}
-                target="_blank"
-                className="text-blue-500"
-              >
-                {user?.link || (
-                  <span className="text-gray-500">add link</span>
-                )}
+              <a href={user?.link} target="_blank" className="text-blue-500">
+                {user?.link || <span className="text-gray-500">add link</span>}
               </a>
             </div>
           </div>
@@ -168,20 +164,26 @@ const ProfilePage = () => {
         </div>
 
         {/* followers and following */}
-        <div className="flex mt-5" >
-          <div className="mr-5 cursor-pointer" onClick={()=>{
-            handleViewFollowers();
-            setText("followers")
-          }}>
+        <div className="flex mt-5">
+          <div
+            className="mr-5 cursor-pointer"
+            onClick={() => {
+              handleViewFollowers();
+              setText("followers");
+            }}
+          >
             <span className="mr-1 font-bold">
               {user?.followers?.length || "0"}
             </span>
             <span className="text-sm text-gray-500">Followers</span>
           </div>
-          <div className="cursor-pointer" onClick={()=>{
-            handleViewFollowers();
-            setText("following")
-          }}>
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              handleViewFollowers();
+              setText("following");
+            }}
+          >
             <span className="mr-1 font-bold">
               {user?.following?.length || "0"}
             </span>
@@ -190,7 +192,14 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {viewFollowers && <Following view={handleViewFollowers} user={user} text={text} me={authUser}/>}
+      {viewFollowers && (
+        <Following
+          view={handleViewFollowers}
+          user={user}
+          text={text}
+          me={authUser}
+        />
+      )}
       {/* Feed type */}
       <div className="px-4 mt-8">
         <div className="flex mb-2">
@@ -219,11 +228,7 @@ const ProfilePage = () => {
         <div className="text-center text-red-500">An Error occured</div>
       )}
 
-      <Posts
-        feedType={feedType}
-        userId={user?._id}
-        username={user?.username}
-      />
+      <Posts feedType={feedType} userId={user?._id} username={user?.username} />
     </section>
   );
 };

@@ -2,10 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import React, { useState } from "react";
 import useFollow from "../../hooks/useFollow";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import FollowSuggestionSkeleton from "../skeletons/FollowSuggestionSkeleton";
 
 const FollowSuggestion = () => {
+  const {pathname} = useLocation()
   const { follow, isPending, } = useFollow();
   const {
     data: suggestedUsers,
@@ -24,11 +25,10 @@ const FollowSuggestion = () => {
       }
     },
   });
-
   if (isLoading || isRefetching) return <FollowSuggestionSkeleton />
 
   return (
-    <section className="hidden lg:w-[30%] h-full px-2 py-1 lg:flex">
+    <section className={`${pathname === "/message" ? "hidden":" hidden lg:w-[30%] h-full px-2 py-1 lg:flex"}`}>
       <div className="flex-col px-4 border border-gray-700 rounded-lg ">
         {suggestedUsers &&
           suggestedUsers.data.map((user) => (

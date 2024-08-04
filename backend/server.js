@@ -7,7 +7,6 @@ import connectToDB from './db/connectToMongoDB.js'
 
 dotenv.config()
 
-const app = express()
 const PORT = process.env.PORT || 5000
 const __dirname = path.resolve()
 
@@ -27,12 +26,16 @@ import userRoutes from './routes/user.routes.js'
 import postRoutes from './routes/post.routes.js'
 import notificationRoutes from './routes/notification.routes.js'
 import feedbackRoutes from './routes/feedback.routes.js'
+import messageRoute from './routes/message.routes.js'
+import { app, server, io } from './socket/socket.js'
 
 app.use("/api/auth", authRoutes)
 app.use("/api/users", userRoutes)
 app.use("/api/posts", postRoutes)
 app.use("/api/notifications", notificationRoutes)
 app.use("/api/feedback", feedbackRoutes)
+// Message
+app.use("/api/message", messageRoute)
 
 
 if(process.env.NODE_ENV === 'production') {
@@ -48,7 +51,7 @@ app.get("/", (req, res)=>{
 })
 
 
-app.listen(PORT, ()=>{
+server.listen(PORT, ()=>{
     console.log(`App is listening on port ${PORT}`)
     connectToDB()
 })

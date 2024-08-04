@@ -39,6 +39,7 @@ const Posts = ({ feedType, userId }) => {
   staleTime: 0
  })
 
+
  useEffect(()=>{
 refetch()
  }, [feedType, username,refetch])

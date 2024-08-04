@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import Xsvg from "../../components/svgs/X";
-import { MdHomeFilled } from "react-icons/md";
+import { MdHomeFilled, MdMessage } from "react-icons/md";
 import { IoIosNotifications } from "react-icons/io";
 import { TbLogout2 } from "react-icons/tb";
 import { FaCoffee, FaUser } from "react-icons/fa";
@@ -103,6 +103,20 @@ const Sidebar = () => {
               <MdFeedback />
             </span>
             <span className="hidden lg:block">Feedback</span>
+          </Link>
+        </div>
+        
+         <div
+          className={`flex items-center mb-4 text-xl ${
+            location.pathname === "/message" ? "text-[#f39200]" : ""
+          }`}
+          title="message"
+        >
+          <Link to={`/message`} className="flex items-center">
+            <span className="mr-2 text-xl">
+              <MdMessage />
+            </span>
+            <span className="hidden lg:block">ChitChat</span>
           </Link>
         </div>
 

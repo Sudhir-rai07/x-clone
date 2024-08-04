@@ -5,7 +5,7 @@ import Posts from "../../components/common/Posts";
 const HomePage = () => {
   const [feedType, setFeedType] = useState("forYou");
   return (
-    <section className="w-[40rem] lg:w-[50%] h-screen border-r border-gray-500 px-2 overflow-y-scroll no-scrollbar">
+    <section className="w-[40rem] lg:w-[50%] h-screen border-r border-gray-500 px-2 overflow-y-scroll ">
       <div className="sticky top-0 flex items-center justify-between w-full h-12 px-0 font-semibold border-b border-white backdrop-blur ">
         <div
           className={`${

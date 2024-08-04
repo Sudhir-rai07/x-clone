@@ -19,7 +19,7 @@ const AddCommentModal = ({ setModalView, post, comment }) => {
     setText("");
   };
   return (
-    <div className="flex-col items-center justify-center w-full h-full py-4 overflow-y-scroll bg-black no-scrollbar">
+    <div className="flex-col items-center justify-center w-full h-full py-4 overflow-y-scroll bg-black">
       {post.comments.length === 0 ? (
         <div className="text-center">No comments yet</div>
       ) : (

@@ -57,7 +57,7 @@ const PostPage = ({ authUser }) => {
 
   if(isError) return (<div className="flex flex-col items-center justify-center w-full mt-10">
     <h2 className="text-2xl">Post not found ☹️</h2>
-    <img src="https://media4.giphy.com/media/eIsBUaOERJ3MrkkBL3/200w.webp?cid=ecf05e473vcuv6o1dlaivq6p028q6lf47zk5nx7p9j6psres&ep=v1_gifs_related&rid=200w.webp&ct=g" alt="" className="rounded-full" />
+    <img src="https://media4.giphy.com/media/eIsBUaOERJ3MrkkBL3/200w.webp?cid=ecf05e473vcuv6o1dlaivq6p028q6lf47zk5nx7p9j6psres&ep=v1_gifs_related&rid=200w.webp&ct=g" className="rounded-full" />
   </div>)
   return (
     <div className="h-screen w-[40rem] lg:w-[60%] overflow-y-scroll relative overflow-x-hidden px-4">
@@ -95,7 +95,7 @@ const PostPage = ({ authUser }) => {
             </p>
           )}
           {postData?.img && (
-            <img src={postData?.img} alt="" className="rounded-lg w-72" />
+            <img src={postData?.img} className="rounded-lg w-72" />
           )}
           <p className="flex items-center w-full mt-2 mr-auto text-sm text-gray-400 border-gray-500">
             <FaStopwatch className="mr-2" /> {createdAt}{" "}

@@ -11,7 +11,7 @@ const Feedbacks = () => {
     <div className="w-[300px] border-2  rounded-md border-[rgba(8,_112,_184,_0.7)] px-2 py-2">
       <div className="flex items-center w-full h-12">
         <div className="w-8 h-8 overflow-hidden rounded-full">
-          <img src="/avatar-placeholder.png" alt="" />
+          <img src="/avatar-placeholder.png" alt=/>
         </div>
         <div className="flex-col ml-2">
           <p className="text-sm font-bold">Fullname</p>

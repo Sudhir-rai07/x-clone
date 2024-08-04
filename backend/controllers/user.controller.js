@@ -22,7 +22,7 @@ export const getUserProfile = async (req, res) => {
 
     res.status(200).json(user);
   } catch (error) {
-    res.satus(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
     console.log("An error occured in getUserProfile contoller ", error.message);
   }
 };
@@ -193,3 +193,18 @@ export const updateProfile = async (req, res) => {
     console.log("An error occured in upadateProfile contoller ", error.message);
   }
 };
+
+export const getAllUsers = async (req, res) =>{
+  const {_id: me} = req.user
+  try {
+    const users = await User.find().select("-password");
+    if(!users) return res.status(200).json([])
+
+      const allUsers = users.filter((user)=> user._id.toString() !== me.toString())
+    res.status(200).json(allUsers)
+    
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    console.log("An error occured in getAllUsers contoller ", error.message);
+  }
+}
