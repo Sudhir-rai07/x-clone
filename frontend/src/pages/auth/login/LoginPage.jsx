@@ -64,7 +64,7 @@ const LoginPage = () => {
           <div className="flex flex-col mt-2">
             <input
               type="text"
-              placeholder="username"
+              placeholder="username or email"
               value={formData.username}
               onChange={handleInputChange}
               name="username"
