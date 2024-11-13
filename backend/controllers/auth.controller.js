@@ -88,7 +88,7 @@ export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ $or:[{username:username}, {email: username}]});
     if (!user) return res.status(400).json({ error: "User not found" });
     const isPasswordValid = await bcrypt.compare(
       password,

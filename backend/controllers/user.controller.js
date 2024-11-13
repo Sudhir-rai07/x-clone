@@ -8,7 +8,9 @@ export const getUserProfile = async (req, res) => {
   const { username } = req.params;
 
   try {
-    const user = await User.findOne({ username })
+    const user = await User.findOne({
+      $or:[{username: username}, {email: username}]
+    })
       .select("-password")
       .populate({
         path: "followers",
